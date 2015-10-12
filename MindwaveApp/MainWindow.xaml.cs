@@ -38,33 +38,6 @@ namespace MindwaveApp
         public DataCollection midGammaValuesCollection;
         
 
-        //DispatcherTimer updateCollection;
-
-        //#region OnPropertyChangeUpdate Updating values
-
-        //private int _maxAttetion;
-        //private int _minAttetion;
-
-        //public int MaxAttetion
-        //{
-        //    get;
-        //    set;
-        //    //get { return _maxAttetion; }
-        //    //set { _maxAttetion = value; this.OnPropertyChanged("MaxAttention"); }
-        //}
-
-        //public int MinAttetion
-        //{
-        //    get;
-        //    set;
-        //    //get { return _minAttetion; }
-        //    //set { _minAttetion = value; this.OnPropertyChanged("MinAttention"); }
-        //}
-
-        //#endregion
-
-        //private int i = 0;
-
 
         public MainWindow()
         {
@@ -153,14 +126,10 @@ namespace MindwaveApp
             connector.DeviceValidating += new EventHandler(OnDeviceValidating);
 
             connector.ConnectScan("COM3");
-
-            
+  
             
             // Włączenie detekcji mrugania.
             //connector.setBlinkDetectionEnabled(true);
-
-
-            
 
         }
 
@@ -172,30 +141,12 @@ namespace MindwaveApp
             Environment.Exit(0);
         }
 
-        //void updateCollection_Tick(object sender, EventArgs e)
-        //{
-        //    i++;
-        //    attentionValuesCollection.Add(new AttentionValue( Math.Sin(i*0.1), DateTime.Now ));
-        //}
-
-        //private async void Wait(int value)
-        //{
-        //    await Task.Delay(TimeSpan.FromMilliseconds(value));
-        //}
-
-        // Called when a device is connected 
-
-
 
         public void OnDeviceConnected(object sender, EventArgs e)
         {
            
 
             Connector.DeviceEventArgs de = (Connector.DeviceEventArgs)e;
-
-            //this.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => textBlock1.Text += "Device found on: " + de.Device.PortName);
-
-            //textBlock1.Text += "Device found on: " + de.Device.PortName;
 
             Dispatcher.Invoke(DispatcherPriority.Normal, (Action)(() =>
             {
@@ -204,23 +155,12 @@ namespace MindwaveApp
             }));
             de.Device.DataReceived += new EventHandler(OnDataReceived);
 
-            /// ????
-            
-            //updateCollection.Tick += new EventHandler(updateCollection_Tick);
-            //updateCollection.Start();
 
         }
 
-
-
-
         // Called when scanning fails
-
         public void OnDeviceFail(object sender, EventArgs e)
         {
-
-            //this.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => textBlock1.Text += "No devices found! :( ");
-            //textBlock1.Text += "No devices found! :( ";
             Dispatcher.Invoke(DispatcherPriority.Normal, (Action)(() =>
             {
                 portTextBlock.Text = "No devices found! :( ";
@@ -233,7 +173,6 @@ namespace MindwaveApp
 
         public void OnDeviceValidating(object sender, EventArgs e)
         {
-            //this.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => textBlock1.Text += "Validating: ");
 
             Dispatcher.Invoke(DispatcherPriority.Normal, (Action)(() =>
             {
@@ -277,27 +216,17 @@ namespace MindwaveApp
                 if (tgParser.ParsedData[i].ContainsKey("PoorSignal"))
                 {
 
-                    //The following line prints the Time associated with the parsed data
-                    //Console.WriteLine("Time:" + tgParser.ParsedData[i]["Time"]);
-
-                    //A Poor Signal value of 0 indicates that your headset is fitting properly
-                    //Console.WriteLine("Poor Signal:" + tgParser.ParsedData[i]["PoorSignal"]);
-                    //textBlock1.Text = "Poor Signal:" + tgParser.ParsedData[i]["PoorSignal"];
-
                     Dispatcher.Invoke(DispatcherPriority.Normal, (Action)(() =>
                     {
                         poorSignalTextBlock.Text = "Poor Signal:" + tgParser.ParsedData[i]["PoorSignal"];
                         
                     }));
 
-                    //poorSig = (byte)tgParser.ParsedData[i]["PoorSignal"];
                 }
 
 
                 if (tgParser.ParsedData[i].ContainsKey("Attention"))
                 {
-
-                    //Console.WriteLine("Att Value:" + tgParser.ParsedData[i]["Attention"]);
                     Dispatcher.Invoke(DispatcherPriority.Normal, (Action)(() =>
                     {
                         attentionTextBlock.Text = "Att Value:" + tgParser.ParsedData[i]["Attention"];
@@ -310,7 +239,6 @@ namespace MindwaveApp
                 if (tgParser.ParsedData[i].ContainsKey("Meditation"))
                 {
 
-                    //Console.WriteLine("Med Value:" + tgParser.ParsedData[i]["Meditation"]);
 
                     Dispatcher.Invoke(DispatcherPriority.Normal, (Action)(() =>
                     {
@@ -322,13 +250,11 @@ namespace MindwaveApp
 
                 if (tgParser.ParsedData[i].ContainsKey("EegPowerDelta"))
                 {
-                    //Console.WriteLine("Delta: " + tgParser.ParsedData[i]["EegPowerDelta"]);
 
                     Dispatcher.Invoke(DispatcherPriority.Normal, (Action)(() =>
                     {
                         eegPowerDeltaTextBlock.Text = "Delta: " + tgParser.ParsedData[i]["EegPowerDelta"];
                         deltaValuesCollection.Add(new DataValue(tgParser.ParsedData[i]["EegPowerDelta"], DateTime.Now));
-                        //MakeRelative(deltaValuesCollection);
                     }));
 
 
@@ -417,25 +343,11 @@ namespace MindwaveApp
 
         }
 
-        //#region INotifyPropertyChanged members
-
-        //public event PropertyChangedEventHandler PropertyChanged;
-        //protected void OnPropertyChanged(string propertyName)
-        //{
-        //    if (PropertyChanged != null)
-        //        this.PropertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
-        //}
-
-        //#endregion
 
         public void MakeRelative(DataCollection collection)
         {
             DataCollection temp = new DataCollection();
 
-            //foreach (var item in collection)
-            //{
-            //    temp.Add(new DataValue(collection[item].Value / collection.MaxValue, collection[item].Date));
-            //}
 
             for (int i = 0; i < collection.Count; i++)
             {
