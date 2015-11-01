@@ -22,6 +22,8 @@ namespace PuzzleApp
         public MainWindow()
         {
             InitializeComponent();
+            
+            
         }
     }
 }

@@ -36,7 +36,7 @@
   <ItemGroup>
     <Reference Include="DynamicDataDisplay, Version=0.3.0.0, Culture=neutral, PublicKeyToken=5b7d744a7263923f, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>libs\DynamicDataDisplay.dll</HintPath>
+      <HintPath>..\MindwaveLib\libs\DynamicDataDisplay.dll</HintPath>
     </Reference>
     <Reference Include="Parser">
       <HintPath>..\packages\DynamicDataDisplayWpf.0.4.0\lib\Parser.dll</HintPath>
@@ -49,7 +49,7 @@
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="ThinkGear, Version=2.8.4892.19806, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>libs\ThinkGear.dll</HintPath>
+      <HintPath>..\MindwaveLib\libs\ThinkGear.dll</HintPath>
     </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
@@ -68,7 +68,6 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="DataCollection.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -92,7 +91,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="libs\NLog.config" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -100,15 +98,11 @@
     </None>
     <AppDesigner Include="Properties\" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
-    <Content Include="libs\DynamicDataDisplay.dll" />
-    <Content Include="libs\Jayrock.Json.dll" />
-    <Resource Include="libs\Jayrock.LICENSE.txt" />
-    <Content Include="libs\NLog.dll" />
-    <Resource Include="libs\NLog.LICENSE.txt" />
-    <Resource Include="libs\NLog.xml" />
-    <Content Include="libs\ThinkGear.dll" />
+    <ProjectReference Include="..\MindwaveLib\MindwaveLib.csproj">
+      <Project>{bbf56637-5766-4a70-9c7d-1ba322ba32e0}</Project>
+      <Name>MindwaveLib</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

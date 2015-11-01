@@ -10,6 +10,7 @@ using Microsoft.Research.DynamicDataDisplay.DataSources;
 using System.ComponentModel;
 
 
+
 namespace MindwaveApp
 {
     /// <summary>
@@ -19,6 +20,9 @@ namespace MindwaveApp
     {
         public static Connector connector;
         public static byte poorSig;
+
+        
+
 
 
         // Kolekcja wartości Attention pobranych z urzadzenia.
@@ -36,8 +40,9 @@ namespace MindwaveApp
 
         public DataCollection lowGammaValuesCollection;
         public DataCollection midGammaValuesCollection;
-        
 
+       
+ 
 
         public MainWindow()
         {
