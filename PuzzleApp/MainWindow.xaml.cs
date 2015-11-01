@@ -18,6 +18,7 @@ using Microsoft.Research.DynamicDataDisplay.DataSources;
 using MindwaveLib;
 using NeuroSky.ThinkGear;
 using System.Windows.Threading;
+using System.IO;
 
 namespace PuzzleApp
 {
@@ -28,6 +29,14 @@ namespace PuzzleApp
     {
         public static Connector connector;
         public static byte poorSig;
+
+        public const int MaxWordNumber = 2709804;
+        public static Random randomWordNumber;
+        public string path = @"..\..\..\sjp-20151013\slowa-win-utf8.txt";
+
+
+
+       
 
 
         public DataCollection attentionValuesCollection;
@@ -50,7 +59,50 @@ namespace PuzzleApp
             connector.DeviceValidating += new EventHandler(OnDeviceValidating);
 
             connector.ConnectScan("COM3");
+
+            //Stworzenie obiektu typu Random do wyboru losowego słowa ze słownika.
+            randomWordNumber = new Random();
+
+            
+            
+
         }
+
+        public string GetAWord()
+        {
+            int wordNumber = randomWordNumber.Next(0, MaxWordNumber);
+
+            return ReadLine(path, wordNumber);
+     
+        }
+
+
+        //http://stackoverflow.com/questions/1262965/how-do-i-read-a-specified-line-in-a-text-file
+        public string ReadLine(string FilePath, int LineNumber)
+        {
+            string result = "";
+            try
+            {
+                if (File.Exists(FilePath))
+                {
+                    using (StreamReader _StreamReader = new StreamReader(FilePath, System.Text.Encoding.UTF8, true))
+                    {
+                        for (int a = 0; a < LineNumber; a++)
+                        {
+                            result = _StreamReader.ReadLine();
+                        }
+                    }
+                }
+            }
+            catch {
+                
+            }
+            return result;
+        }
+         
+
+
+        #region DeviceMethods
 
         public void OnWindowClosing(object sender, CancelEventArgs e)
         {
@@ -101,7 +153,6 @@ namespace PuzzleApp
         public void OnDataReceived(object sender, EventArgs e)
         {
 
-            //Device d = (Device)sender;
 
             Device.DataEventArgs de = (Device.DataEventArgs)e;
             DataRow[] tempDataRowArray = de.DataRowArray;
@@ -142,6 +193,28 @@ namespace PuzzleApp
 
             }
 
+        }
+        #endregion
+
+        private void StartButton_Click(object sender, RoutedEventArgs e)
+        {
+
+
+
+            WordLabel.Content = Reverse(GetAWord()).ToUpper(); //GetAWord().ToUpper();
+
+           
+
+            
+
+        }
+
+        //Source : http://stackoverflow.com/questions/228038/best-way-to-reverse-a-string
+        public static string Reverse(string s)
+        {
+            char[] charArray = s.ToCharArray();
+            Array.Reverse(charArray);
+            return new string(charArray);
         }
 
 

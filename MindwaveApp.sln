@@ -9,6 +9,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PuzzleApp", "PuzzleApp\Puzz
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MindwaveLib", "MindwaveLib\MindwaveLib.csproj", "{BBF56637-5766-4A70-9C7D-1BA322BA32E0}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "sjp-20151013", "sjp-20151013", "{131D1303-EF75-4811-92A2-A9E1D1C7DD2F}"
+	ProjectSection(SolutionItems) = preProject
+		sjp-20151013\README.txt = sjp-20151013\README.txt
+		sjp-20151013\slowa-win-utf8.txt = sjp-20151013\slowa-win-utf8.txt
+		sjp-20151013\slowa-win.txt = sjp-20151013\slowa-win.txt
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
