@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Research.DynamicDataDisplay.Common;
 
-namespace MindwaveApp
+namespace MindwaveLib
 {
     public class DataCollection : RingArray<DataValue>
     {

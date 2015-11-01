@@ -35,10 +35,6 @@
                     <d3:VerticalAxisTitle FontFamily="Arial" Content="valueAxis"/>
                     <d3:HorizontalAxisTitle FontFamily="Arial" Content="dateAxis"/>
 
-                    <!--<d3:HorizontalLine Value="{Binding MaxAttention}" Stroke="Red" StrokeThickness="2"/>
-                <d3:HorizontalLine Value="{Binding MinAttention}" Stroke="Red" StrokeThickness="2"/>-->
-
-
                 </d3:ChartPlotter>
 
                 <d3:ChartPlotter x:Name="plotterMeditation" Grid.Column="1">

@@ -8,6 +8,7 @@ using System.Windows.Threading;
 using Microsoft.Research.DynamicDataDisplay;
 using Microsoft.Research.DynamicDataDisplay.DataSources;
 using System.ComponentModel;
+using MindwaveLib;
 
 
 
@@ -20,9 +21,6 @@ namespace MindwaveApp
     {
         public static Connector connector;
         public static byte poorSig;
-
-        
-
 
 
         // Kolekcja wartości Attention pobranych z urzadzenia.

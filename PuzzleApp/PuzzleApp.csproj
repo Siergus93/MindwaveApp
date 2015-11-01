@@ -36,7 +36,7 @@
   <ItemGroup>
     <Reference Include="DynamicDataDisplay, Version=0.3.0.0, Culture=neutral, PublicKeyToken=5b7d744a7263923f, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\MindwaveLib\libs\DynamicDataDisplay.dll</HintPath>
+      <HintPath>..\MindwaveLib\bin\Debug\DynamicDataDisplay.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -93,6 +93,12 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MindwaveLib\MindwaveLib.csproj">
+      <Project>{bbf56637-5766-4a70-9c7d-1ba322ba32e0}</Project>
+      <Name>MindwaveLib</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

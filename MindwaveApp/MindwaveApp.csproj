@@ -36,7 +36,7 @@
   <ItemGroup>
     <Reference Include="DynamicDataDisplay, Version=0.3.0.0, Culture=neutral, PublicKeyToken=5b7d744a7263923f, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\MindwaveLib\libs\DynamicDataDisplay.dll</HintPath>
+      <HintPath>..\MindwaveLib\bin\Debug\DynamicDataDisplay.dll</HintPath>
     </Reference>
     <Reference Include="Parser">
       <HintPath>..\packages\DynamicDataDisplayWpf.0.4.0\lib\Parser.dll</HintPath>
