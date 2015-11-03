@@ -34,11 +34,6 @@ namespace PuzzleApp
         public static Random randomWordNumber;
         public string path = @"..\..\..\sjp-20151013\slowa-win-utf8.txt";
 
-
-
-       
-
-
         public DataCollection attentionValuesCollection;
 
         public MainWindow()
@@ -186,6 +181,7 @@ namespace PuzzleApp
                     Dispatcher.Invoke(DispatcherPriority.Normal, (Action)(() =>
                     {
                         attentionTextBlock.Text = "Att Value:" + tgParser.ParsedData[i]["Attention"];
+                        Attention.Text = tgParser.ParsedData[i]["Attention"].ToString();
                         attentionValuesCollection.Add(new DataValue(tgParser.ParsedData[i]["Attention"], DateTime.Now));
                     }));
 
@@ -199,14 +195,7 @@ namespace PuzzleApp
         private void StartButton_Click(object sender, RoutedEventArgs e)
         {
 
-
-
-            WordLabel.Content = Reverse(GetAWord()).ToUpper(); //GetAWord().ToUpper();
-
-           
-
-            
-
+            WordLabel.Content = Reverse(GetAWord()).ToUpper(); 
         }
 
         //Source : http://stackoverflow.com/questions/228038/best-way-to-reverse-a-string
