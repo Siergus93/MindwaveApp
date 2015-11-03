@@ -20,6 +20,8 @@ using NeuroSky.ThinkGear;
 using System.Windows.Threading;
 using System.IO;
 
+using System.Diagnostics;
+
 namespace PuzzleApp
 {
     /// <summary>
@@ -33,8 +35,19 @@ namespace PuzzleApp
         public const int MaxWordNumber = 2709804;
         public static Random randomWordNumber;
         public string path = @"..\..\..\sjp-20151013\slowa-win-utf8.txt";
+        public int wordNumber;
 
         public DataCollection attentionValuesCollection;
+
+        //How many times signal came at solving a puzzle.
+        public int attentionComingCounter;
+        //Sum of attention signal values.
+        public int attentionValueSum;
+        //Collection of WordStats
+        public List<WordStat> wordStatList;
+        //How many puzzles have been solved.
+        public int puzzlesSolved;
+
 
         public MainWindow()
         {
@@ -58,6 +71,13 @@ namespace PuzzleApp
             //Stworzenie obiektu typu Random do wyboru losowego słowa ze słownika.
             randomWordNumber = new Random();
 
+            wordNumber = 0;
+
+            attentionComingCounter = 0;
+            attentionValueSum = 0;
+            puzzlesSolved = 0;
+            wordStatList = new List<WordStat>();
+            
             
             
 
@@ -65,7 +85,7 @@ namespace PuzzleApp
 
         public string GetAWord()
         {
-            int wordNumber = randomWordNumber.Next(0, MaxWordNumber);
+            wordNumber = randomWordNumber.Next(0, MaxWordNumber);
 
             return ReadLine(path, wordNumber);
      
@@ -102,6 +122,9 @@ namespace PuzzleApp
         public void OnWindowClosing(object sender, CancelEventArgs e)
         {
             connector.Close();
+
+            
+
             Environment.Exit(0);
         }
 
@@ -183,6 +206,11 @@ namespace PuzzleApp
                         attentionTextBlock.Text = "Att Value:" + tgParser.ParsedData[i]["Attention"];
                         Attention.Text = tgParser.ParsedData[i]["Attention"].ToString();
                         attentionValuesCollection.Add(new DataValue(tgParser.ParsedData[i]["Attention"], DateTime.Now));
+
+                        //Puzzle solving statistics.
+                        attentionValueSum += (int)tgParser.ParsedData[i]["Attention"];
+                        attentionComingCounter += 1;
+
                     }));
 
                 }
@@ -195,7 +223,20 @@ namespace PuzzleApp
         private void StartButton_Click(object sender, RoutedEventArgs e)
         {
 
-            WordLabel.Content = Reverse(GetAWord()).ToUpper(); 
+            
+            WordLabel.Content = Reverse(GetAWord()).ToUpper();
+
+            if (puzzlesSolved > 0 && attentionComingCounter > 0)
+            {
+                wordStatList.Add(new WordStat { WordNumber = wordNumber, AverageAttentionValue = attentionValueSum / attentionComingCounter });
+                Console.WriteLine("n: " + wordNumber + " av: " + attentionValueSum / attentionComingCounter);
+                puzzlesSolved++;
+            }
+            else puzzlesSolved++;
+
+
+            attentionComingCounter = 0;
+            attentionValueSum = 0;
         }
 
         //Source : http://stackoverflow.com/questions/228038/best-way-to-reverse-a-string
@@ -205,6 +246,11 @@ namespace PuzzleApp
             Array.Reverse(charArray);
             return new string(charArray);
         }
+
+
+
+
+
 
 
 
