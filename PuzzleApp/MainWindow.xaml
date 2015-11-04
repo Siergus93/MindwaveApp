@@ -111,7 +111,7 @@
             <TextBlock x:Name="attentionTextBlock" Text="AttentionValue" TextWrapping="Wrap"/>
         </StackPanel>
 
-        <Button x:Name="StartButton" Content="StartButton" Click="StartButton_Click"></Button>
+        <Button x:Name="StartButton" Content="Next puzzle!" Click="StartButton_Click" FontSize="20"></Button>
 
     </Grid>
 
