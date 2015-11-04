@@ -47,6 +47,10 @@ namespace PuzzleApp
         public List<WordStat> wordStatList;
         //How many puzzles have been solved.
         public int puzzlesSolved;
+        //Current word
+        public string currentWord;
+        //Previous word
+        public string previousWord;
 
 
         public MainWindow()
@@ -77,7 +81,7 @@ namespace PuzzleApp
             attentionValueSum = 0;
             puzzlesSolved = 0;
             wordStatList = new List<WordStat>();
-            
+            currentWord = "";
             
             
 
@@ -223,13 +227,14 @@ namespace PuzzleApp
         private void StartButton_Click(object sender, RoutedEventArgs e)
         {
 
-            
-            WordLabel.Content = Reverse(GetAWord()).ToUpper();
+            currentWord = GetAWord();
+            WordLabel.Content = Reverse(currentWord.ToUpper());
 
             if (puzzlesSolved > 0 && attentionComingCounter > 0)
             {
-                wordStatList.Add(new WordStat { WordNumber = wordNumber, AverageAttentionValue = attentionValueSum / attentionComingCounter });
-                Console.WriteLine("n: " + wordNumber + " av: " + attentionValueSum / attentionComingCounter);
+                //wordStatList.Add(new WordStat { WordNumber = wordNumber, AverageAttentionValue = attentionValueSum / attentionComingCounter });
+                //w - word, l - length, av - average value of Attention
+                Console.WriteLine("w: " + previousWord + " l: " + previousWord.Length + " av: " + attentionValueSum / attentionComingCounter);
                 puzzlesSolved++;
             }
             else puzzlesSolved++;
@@ -237,6 +242,7 @@ namespace PuzzleApp
 
             attentionComingCounter = 0;
             attentionValueSum = 0;
+            previousWord = currentWord;
         }
 
         //Source : http://stackoverflow.com/questions/228038/best-way-to-reverse-a-string
