@@ -61,7 +61,6 @@
     <Content Include="libs\ThinkGear.dll" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="libs\config.json" />
     <None Include="libs\NLog.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
