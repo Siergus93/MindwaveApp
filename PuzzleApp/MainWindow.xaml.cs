@@ -22,6 +22,8 @@ using System.IO;
 
 using System.Diagnostics;
 
+//using libUCLA;
+
 namespace PuzzleApp
 {
     /// <summary>
@@ -51,6 +53,11 @@ namespace PuzzleApp
         public string currentWord;
         //Previous word
         public string previousWord;
+
+        //Instance of object which contains configuration for sending data.
+        //ULoader_JSON config;
+        //Instacje of object which sends data.
+        //USender uSender;
 
 
         public MainWindow()
@@ -82,8 +89,10 @@ namespace PuzzleApp
             puzzlesSolved = 0;
             wordStatList = new List<WordStat>();
             currentWord = "";
-            
-            
+
+
+            //config = new ULoader_JSON(@"..\..\config.json");
+            //uSender = config.GetSender("output1");
 
         }
 
@@ -214,6 +223,17 @@ namespace PuzzleApp
                         //Puzzle solving statistics.
                         attentionValueSum += (int)tgParser.ParsedData[i]["Attention"];
                         attentionComingCounter += 1;
+
+                        //Sending data to another app.
+                        //try
+                        //{
+                        //    byte[] data = { 10, 8, 6, 4 };
+                        //    uSender.SendData(data);
+                        //}
+                        //catch (UException exc)
+                        //{
+                        //    Console.WriteLine(exc.Message);
+                        //}
 
                     }));
 

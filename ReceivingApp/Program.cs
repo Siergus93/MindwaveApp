@@ -9,9 +9,9 @@ namespace ReceivingApp
         {
             try
             {
-                ULoader_JSON config = new ULoader_JSON(@"config.json";)
+                ULoader_JSON config = new ULoader_JSON("config.json");
                 UReceiver uReceiver = config.GetReceiver("input1");
-                uReceiver.DataReceived += new UReceiveHandler(onData);
+                uReceiver.DataReceived += new UReceiveHandler(OnData);
                 uReceiver.Receive();
 
             }
@@ -19,6 +19,8 @@ namespace ReceivingApp
             {
                 Console.Write(exc.Message);
             }
+
+            Console.ReadKey();
         }
 
         private static void OnData(object sender, UDataReceivedArgs data)
