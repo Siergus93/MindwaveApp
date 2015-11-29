@@ -34,11 +34,12 @@ namespace ReceivingApp
 
         private static void OnData(object sender, UDataReceivedArgs data)
         {
-            foreach (byte b in data.Buffer)
-            {
-                Console.Write("Attention: " + b + "\n");
-            }
-            Thread.Sleep(1000);
+            //foreach (byte b in data.Buffer)
+            //{
+            //    Console.Write("Attention: " + b + " L: " + data.Buffer.Length + " T: " + DateTime.UtcNow.ToString() + "\n");
+            //}
+            Console.Write("Attention: " + BitConverter.ToSingle(data.Buffer, 0) + "T: " + DateTime.UtcNow.ToString() + "\n");
+            //Thread.Sleep(1000);
         }
     }
 }

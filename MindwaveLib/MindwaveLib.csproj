@@ -51,6 +51,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="libs\CrossroadsIO.dll" />
     <Content Include="libs\DynamicDataDisplay.dll" />
     <Content Include="libs\Jayrock.Json.dll" />
     <Content Include="libs\Jayrock.LICENSE.txt" />

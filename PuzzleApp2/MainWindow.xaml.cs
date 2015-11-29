@@ -133,12 +133,13 @@ namespace PuzzleApp2
 
             Dispatcher.Invoke(DispatcherPriority.Normal, (Action)(() =>
             {
-                attentionTextBlock.Text = "Att Value: " + e.ThinkGearState.Attention;
+                attentionValue = e.ThinkGearState.Attention;
+                attentionTextBlock.Text = "Att Value: " + attentionValue;
                 poorSignalTextBlock.Text = "Poor Signal: " + e.ThinkGearState.PoorSignal;
-                Attention.Text = e.ThinkGearState.Attention.ToString();
-                attentionValuesCollection.Add(new DataValue(e.ThinkGearState.Attention, DateTime.Now));
+                Attention.Text = attentionValue.ToString();
+                attentionValuesCollection.Add(new DataValue(attentionValue, DateTime.Now));
 
-                attentionValueSum += (int)e.ThinkGearState.Attention;
+                attentionValueSum += (int)attentionValue;
                 attentionComingCounter += 1;
 
                 try
@@ -147,7 +148,15 @@ namespace PuzzleApp2
                     //USender uSender = config.GetSender("output1");
                     //byte[] data = new byte[1];
                     //data[0] = Byte.Parse(e.ThinkGearState.Attention.ToString());
-                    uSender.SendData(BitConverter.GetBytes(e.ThinkGearState.Attention));
+                    byte[] data = BitConverter.GetBytes(attentionValue);
+                    uSender.SendData(data);
+                    Console.WriteLine("AV: " + attentionValue + " T: " + DateTime.UtcNow.ToString());
+                    //foreach (byte b in data)
+                    //{
+                    //    Console.Write("At: " + b + "\t");
+                    //}
+                    
+                    //Console.WriteLine("AV: " + attentionValue + " T: " + DateTime.UtcNow.ToString());
                     //uSender.SendData(BitConverter.GetBytes(attentionComingCounter));
                     
                 }
