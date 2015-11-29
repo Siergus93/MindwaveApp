@@ -1,5 +1,6 @@
 ﻿using System;
 using libUCLA;
+using System.Threading;
 
 namespace ReceivingApp
 {
@@ -7,28 +8,37 @@ namespace ReceivingApp
     {
         static void Main(string[] args)
         {
-            try
-            {
-                ULoader_JSON config = new ULoader_JSON("config.json");
-                UReceiver uReceiver = config.GetReceiver("input1");
-                uReceiver.DataReceived += new UReceiveHandler(OnData);
-                uReceiver.Receive();
+            ULoader_JSON config = new ULoader_JSON("config.json");
+            UReceiver uReceiver = config.GetReceiver("input1");
 
-            }
-            catch(UException exc)
+            while(true)
             {
-                Console.Write(exc.Message);
+                try
+                {
+                    uReceiver.DataReceived += new UReceiveHandler(OnData);
+                    uReceiver.Receive();
+                    
+                }
+                catch (UException exc)
+                {
+                    Console.Write(exc.Message);
+                }
+
+                Thread.Sleep(1000);
             }
 
-            Console.ReadKey();
+            
+
+            
         }
 
         private static void OnData(object sender, UDataReceivedArgs data)
         {
             foreach (byte b in data.Buffer)
             {
-                Console.Write(b + "\t");
+                Console.Write("Attention: " + b + "\n");
             }
+            Thread.Sleep(1000);
         }
     }
 }
