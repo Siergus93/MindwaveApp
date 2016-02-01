@@ -3,15 +3,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d3="http://research.microsoft.com/DynamicDataDisplay/1.0"
         Title="MainWindow" Height="720" Width="1280">
-    <!--
-    <StackPanel>
-        <ComboBox x:Name="portsComboBox" ></ComboBox>
-        <Button x:Name="connectButton" Height="24" Content="Connect" Click="connectButton_Click"></Button>
-        <Button x:Name="disconnectButton" Height="24" Content="Disconnect" Click="disconnectButton_Click"></Button>
-        <TextBox x:Name="attentionValueTextBox" Text="Attention Value"></TextBox>
-    </StackPanel>
-    -->
-
     <Grid Margin="20">
         <Grid.RowDefinitions>
             <RowDefinition></RowDefinition>
@@ -23,7 +14,6 @@
             <ColumnDefinition Width="6*"></ColumnDefinition>
             <ColumnDefinition></ColumnDefinition>
         </Grid.ColumnDefinitions>
-
         <TextBlock x:Name="Attention"
                    Grid.Column="1"
                    HorizontalAlignment="Center"
@@ -31,7 +21,6 @@
                    Text="AT"
                    FontSize="64">
         </TextBlock>
-
         <Label x:Name="WordLabel"
                FontSize="72"
                Content="WordLabel"
@@ -42,10 +31,7 @@
                HorizontalAlignment="Center"
                VerticalAlignment="Center"
                >
-
         </Label>
-
-
         <d3:ChartPlotter
             Grid.Column="1"
             Grid.Row="1"
@@ -53,17 +39,13 @@
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
             x:Name="plotterAttention">
-
             <d3:ChartPlotter.HorizontalAxis>
                 <d3:HorizontalDateTimeAxis x:Name="dateAttention"/>
             </d3:ChartPlotter.HorizontalAxis>
-
             <d3:Header FontFamily="Arial" Content="Attention"/>
             <d3:VerticalAxisTitle FontFamily="Arial" Content="valueAxis"/>
             <d3:HorizontalAxisTitle FontFamily="Arial" Content="dateAxis"/>
-
         </d3:ChartPlotter>
-
         <StackPanel Grid.Column="0"
                     Grid.Row="1">
             <TextBlock x:Name="poorSignalTextBlock" Text="poorSignalValue" TextWrapping="Wrap" />
@@ -71,8 +53,6 @@
             <ComboBox x:Name="portsComboBox" ></ComboBox>
             <Button x:Name="connectButton" Height="24" Content="Connect" Click="connectButton_Click"></Button>
         </StackPanel>
-
         <Button x:Name="StartButton" Content="Next puzzle!" Click="StartButton_Click" FontSize="20" Background="#FFADE635"/>
-
     </Grid>
 </Window>

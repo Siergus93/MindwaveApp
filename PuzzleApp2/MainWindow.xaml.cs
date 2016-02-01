@@ -17,13 +17,10 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 using ThinkGearNET;
-
 using Microsoft.Research.DynamicDataDisplay;
 using Microsoft.Research.DynamicDataDisplay.DataSources;
 using System.IO;
-
 using libUCLA;
-
 
 namespace PuzzleApp2
 {
@@ -33,196 +30,120 @@ namespace PuzzleApp2
     public partial class MainWindow : Window
     {
         private ThinkGearWrapper _thinkGearWrapper;
-
         public float attentionValue;
-
         public const int MaxWordNumber = 2709804;
         public static Random randomWordNumber;
         public string path = @"..\..\..\sjp-20151013\slowa-win-utf8.txt";
         public int wordNumber;
-
         public DataCollection attentionValuesCollection;
-
-        //How many times signal came at solving a puzzle.
         public int attentionComingCounter;
-        //Sum of attention signal values.
         public int attentionValueSum;
-        //Collection of WordStats
-        public List<WordStat> wordStatList;
-        //How many puzzles have been solved.
         public int puzzlesSolved;
-        //Current word
         public string currentWord;
-        //Previous word
         public string previousWord;
-
-        //Instance of object which contains configuration for sending data.
         ULoader_JSON config;
-        //Instacje of object which sends data.
         USender uSender;
-
-
-
 
         public MainWindow()
         {
             InitializeComponent();
             foreach (string port in SerialPort.GetPortNames())
                 portsComboBox.Items.Add(port);
-            portsComboBox.SelectedIndex = 0;
-
+            portsComboBox.SelectedIndex = 1;
             attentionValuesCollection = new DataCollection();
-
-            var attentionDataSource = new EnumerableDataSource<DataValue>(attentionValuesCollection);
+            var attentionDataSource = new EnumerableDataSource<Data>(attentionValuesCollection);
             attentionDataSource.SetXMapping(x => dateAttention.ConvertToDouble(x.Date));
             attentionDataSource.SetYMapping(y => y.Value);
-            plotterAttention.AddLineGraph(attentionDataSource, Colors.Red, 2, "Attetion");
-
-            //Stworzenie obiektu typu Random do wyboru losowego słowa ze słownika.
+            plotterAttention.AddLineGraph(attentionDataSource, Colors.Red, 2, "Attention");
             randomWordNumber = new Random();
-
             wordNumber = 0;
-
             attentionComingCounter = 0;
             attentionValueSum = 0;
             puzzlesSolved = 0;
-            wordStatList = new List<WordStat>();
             currentWord = "";
-
-
             config = new ULoader_JSON("config.json");
             uSender = config.GetSender("output1");
-
         }
 
-        public string GetAWord()
+        public string GetWord()
         {
             wordNumber = randomWordNumber.Next(0, MaxWordNumber);
-
-            return ReadLine(path, wordNumber);
-
+            return ReadWord(path, wordNumber);
         }
 
-        //http://stackoverflow.com/questions/1262965/how-do-i-read-a-specified-line-in-a-text-file
-        public string ReadLine(string FilePath, int LineNumber)
+        public string ReadWord(string path, int line)
         {
-            string result = "";
+            string text = "";
             try
             {
-                if (File.Exists(FilePath))
+                if (File.Exists(path))
                 {
-                    using (StreamReader _StreamReader = new StreamReader(FilePath, System.Text.Encoding.UTF8, true))
+                    using (StreamReader sr = new StreamReader(path, System.Text.Encoding.UTF8, true))
                     {
-                        for (int a = 0; a < LineNumber; a++)
+                        for (int a = 0; a < line; a++)
                         {
-                            result = _StreamReader.ReadLine();
+                            text = sr.ReadLine();
                         }
                     }
                 }
             }
-            catch
-            {
-
-            }
-            return result;
+            catch {}
+            return text;
         }
 
         private void _thinkGearWrapper_ThinkGearChanged(object sender, ThinkGearChangedEventArgs e)
         {
-           
-
             Dispatcher.Invoke(DispatcherPriority.Normal, (Action)(() =>
             {
                 attentionValue = e.ThinkGearState.Attention;
                 attentionTextBlock.Text = "Att Value: " + attentionValue;
                 poorSignalTextBlock.Text = "Poor Signal: " + e.ThinkGearState.PoorSignal;
                 Attention.Text = attentionValue.ToString();
-                attentionValuesCollection.Add(new DataValue(attentionValue, DateTime.Now));
-
+                attentionValuesCollection.Add(new Data(attentionValue, DateTime.Now));
                 attentionValueSum += (int)attentionValue;
                 attentionComingCounter += 1;
-
                 try
                 {
-                    //ULoader_JSON config = new ULoader_JSON("config.json");
-                    //USender uSender = config.GetSender("output1");
-                    //byte[] data = new byte[1];
-                    //data[0] = Byte.Parse(e.ThinkGearState.Attention.ToString());
                     byte[] data = BitConverter.GetBytes(attentionValue);
                     uSender.SendData(data);
-                    Console.WriteLine("AV: " + attentionValue + " T: " + DateTime.UtcNow.ToString());
-                    //foreach (byte b in data)
-                    //{
-                    //    Console.Write("At: " + b + "\t");
-                    //}
-                    
-                    //Console.WriteLine("AV: " + attentionValue + " T: " + DateTime.UtcNow.ToString());
-                    //uSender.SendData(BitConverter.GetBytes(attentionComingCounter));
-                    
+                    Console.WriteLine("AV: " + attentionValue + " T: " + DateTime.UtcNow.ToString());                    
                 }
                 catch (UException exc)
                 {
                     Console.WriteLine(exc.Message);
                 }
-
             }));
-
-            //attentionTextBlock.Text = "Att Value:" + tgParser.ParsedData[i]["Attention"];
-            //Attention.Text = tgParser.ParsedData[i]["Attention"].ToString();
-            //attentionValuesCollection.Add(new DataValue(tgParser.ParsedData[i]["Attention"], DateTime.Now));
-
-            //Puzzle solving statistics.
-            //attentionValueSum += (int)tgParser.ParsedData[i]["Attention"];
-            //attentionComingCounter += 1;
-
-            //Sending data to another app.
-            
             Thread.Sleep(1000);
         }
 
         private void connectButton_Click(object sender, RoutedEventArgs e)
         {
             _thinkGearWrapper = new ThinkGearWrapper();
-
             _thinkGearWrapper.ThinkGearChanged += _thinkGearWrapper_ThinkGearChanged;
-
             if (!_thinkGearWrapper.Connect(portsComboBox.SelectedItem.ToString(), 57600, true))
             {
                 MessageBox.Show("Could not connect to headset!");
             }
-
-
-
-
         }
-
-
         private void StartButton_Click(object sender, RoutedEventArgs e)
         {
-            currentWord = GetAWord();
-            WordLabel.Content = Reverse(currentWord.ToUpper());
-
+            currentWord = GetWord();
+            WordLabel.Content = ReverseWord(currentWord.ToUpper());
             if (puzzlesSolved > 0 && attentionComingCounter > 0)
             {
-                //wordStatList.Add(new WordStat { WordNumber = wordNumber, AverageAttentionValue = attentionValueSum / attentionComingCounter });
-                //w - word, l - length, av - average value of Attention
                 Console.WriteLine("w: " + previousWord + " l: " + previousWord.Length + " av: " + attentionValueSum / attentionComingCounter);
-                puzzlesSolved++;
             }
-            else puzzlesSolved++;
-
-
+            puzzlesSolved++;
             attentionComingCounter = 0;
             attentionValueSum = 0;
             previousWord = currentWord;
         }
 
-        //Source : http://stackoverflow.com/questions/228038/best-way-to-reverse-a-string
-        public static string Reverse(string s)
+        public string ReverseWord(string word)
         {
-            char[] charArray = s.ToCharArray();
-            Array.Reverse(charArray);
-            return new string(charArray);
+            char[] array = word.ToCharArray();
+            Array.Reverse(array);
+            return new string(array);
         }
     }
 }

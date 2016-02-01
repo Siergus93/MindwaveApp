@@ -10,36 +10,24 @@ namespace ReceivingApp
         {
             ULoader_JSON config = new ULoader_JSON("config.json");
             UReceiver uReceiver = config.GetReceiver("input1");
-
             while(true)
             {
                 try
                 {
                     uReceiver.DataReceived += new UReceiveHandler(OnData);
-                    uReceiver.Receive();
-                    
+                    uReceiver.Receive();   
                 }
                 catch (UException exc)
                 {
                     Console.Write(exc.Message);
                 }
-
                 Thread.Sleep(1000);
             }
-
-            
-
-            
         }
 
         private static void OnData(object sender, UDataReceivedArgs data)
         {
-            //foreach (byte b in data.Buffer)
-            //{
-            //    Console.Write("Attention: " + b + " L: " + data.Buffer.Length + " T: " + DateTime.UtcNow.ToString() + "\n");
-            //}
-            Console.Write("Attention: " + BitConverter.ToSingle(data.Buffer, 0) + "T: " + DateTime.UtcNow.ToString() + "\n");
-            //Thread.Sleep(1000);
+            Console.Write("Attention: " + BitConverter.ToSingle(data.Buffer, 0) + "T: " + DateTime.UtcNow.ToString() + "\r");
         }
     }
 }

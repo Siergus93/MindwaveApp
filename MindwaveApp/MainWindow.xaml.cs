@@ -1,53 +1,38 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Media;
-
 using NeuroSky.ThinkGear;
 using System.Windows.Threading;
-
 using Microsoft.Research.DynamicDataDisplay;
 using Microsoft.Research.DynamicDataDisplay.DataSources;
 using System.ComponentModel;
 using MindwaveLib;
-
-
 
 namespace MindwaveApp
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window//, INotifyPropertyChanged
+    public partial class MainWindow : Window
     {
         public static Connector connector;
         public static byte poorSig;
-
-
-        // Kolekcja wartości Attention pobranych z urzadzenia.
         public DataCollection attentionValuesCollection;
         public DataCollection meditationValuesCollection;
-
         public DataCollection deltaValuesCollection;
         public DataCollection thetaValuesCollection;
-
         public DataCollection lowAlphaValuesCollection;
         public DataCollection highAlphaValuesCollection;
-
         public DataCollection lowBetaValuesCollection;
         public DataCollection highBetaValuesCollection;
-
         public DataCollection lowGammaValuesCollection;
         public DataCollection midGammaValuesCollection;
-
-       
- 
 
         public MainWindow()
         {
             InitializeComponent();
             this.DataContext = this;
 
-            // Stworzenie nowej kolekcji.
             attentionValuesCollection = new DataCollection();
             meditationValuesCollection = new DataCollection();
 
@@ -63,80 +48,64 @@ namespace MindwaveApp
             lowGammaValuesCollection = new DataCollection();
             midGammaValuesCollection = new DataCollection();
 
-            var attentionDataSource = new EnumerableDataSource<DataValue>(attentionValuesCollection);
+            var attentionDataSource = new EnumerableDataSource<Data>(attentionValuesCollection);
             attentionDataSource.SetXMapping(x => dateAttention.ConvertToDouble(x.Date));
             attentionDataSource.SetYMapping(y => y.Value);
-            plotterAttention.AddLineGraph(attentionDataSource, Colors.Red, 2, "Attetion");
+            plotterAttention.AddLineGraph(attentionDataSource, Colors.Red, 2, "Attention");
 
-            var meditationDataSource = new EnumerableDataSource<DataValue>(meditationValuesCollection);
+            var meditationDataSource = new EnumerableDataSource<Data>(meditationValuesCollection);
             meditationDataSource.SetXMapping(x => dateMeditation.ConvertToDouble(x.Date));
             meditationDataSource.SetYMapping(y => y.Value);
             plotterMeditation.AddLineGraph(meditationDataSource, Colors.Green, 2, "Meditation");
 
-
-
-            var deltaDataSource = new EnumerableDataSource<DataValue>(deltaValuesCollection);
+            var deltaDataSource = new EnumerableDataSource<Data>(deltaValuesCollection);
             deltaDataSource.SetXMapping(x => dateDelta.ConvertToDouble(x.Date));
             deltaDataSource.SetYMapping(y => y.Value);
             plotterDelta.AddLineGraph(deltaDataSource, Colors.Blue, 2, "Delta");
 
-            var thetaDataSource = new EnumerableDataSource<DataValue>(thetaValuesCollection);
+            var thetaDataSource = new EnumerableDataSource<Data>(thetaValuesCollection);
             thetaDataSource.SetXMapping(x => dateTheta.ConvertToDouble(x.Date));
             thetaDataSource.SetYMapping(y => y.Value);
             plotterTheta.AddLineGraph(thetaDataSource, Colors.Cyan, 2, "Theta");
 
-
-
-            var lowAlphaDataSource = new EnumerableDataSource<DataValue>(lowAlphaValuesCollection);
+            var lowAlphaDataSource = new EnumerableDataSource<Data>(lowAlphaValuesCollection);
             lowAlphaDataSource.SetXMapping(x => dateLowAlpha.ConvertToDouble(x.Date));
             lowAlphaDataSource.SetYMapping(y => y.Value);
             plotterLowAlpha.AddLineGraph(lowAlphaDataSource, Colors.Crimson, 2, "Low Alpha");
 
-            var highAlphaDataSource = new EnumerableDataSource<DataValue>(highAlphaValuesCollection);
+            var highAlphaDataSource = new EnumerableDataSource<Data>(highAlphaValuesCollection);
             highAlphaDataSource.SetXMapping(x => dateHighAlpha.ConvertToDouble(x.Date));
             highAlphaDataSource.SetYMapping(y => y.Value);
             plotterHighAlpha.AddLineGraph(highAlphaDataSource, Colors.Indigo, 2, "High Alpha");
 
-
-
-            var lowBetaDataSource = new EnumerableDataSource<DataValue>(lowBetaValuesCollection);
+            var lowBetaDataSource = new EnumerableDataSource<Data>(lowBetaValuesCollection);
             lowBetaDataSource.SetXMapping(x => dateTheta.ConvertToDouble(x.Date));
             lowBetaDataSource.SetYMapping(y => y.Value);
             plotterLowBeta.AddLineGraph(lowBetaDataSource, Colors.Orchid, 2, "Low Beta");
 
-            var highBetaDataSource = new EnumerableDataSource<DataValue>(highBetaValuesCollection);
+            var highBetaDataSource = new EnumerableDataSource<Data>(highBetaValuesCollection);
             highBetaDataSource.SetXMapping(x => dateTheta.ConvertToDouble(x.Date));
             highBetaDataSource.SetYMapping(y => y.Value);
             plotterHighBeta.AddLineGraph(highBetaDataSource, Colors.Blue, 2, "High Beta");
 
-
-
-            var lowGammaDataSource = new EnumerableDataSource<DataValue>(lowGammaValuesCollection);
+            var lowGammaDataSource = new EnumerableDataSource<Data>(lowGammaValuesCollection);
             lowGammaDataSource.SetXMapping(x => dateLowGamma.ConvertToDouble(x.Date));
             lowGammaDataSource.SetYMapping(y => y.Value);
             plotterLowGamma.AddLineGraph(lowGammaDataSource, Colors.Purple, 2, "Low Gamma");
 
-            var midGammaDataSource = new EnumerableDataSource<DataValue>(midGammaValuesCollection);
+            var midGammaDataSource = new EnumerableDataSource<Data>(midGammaValuesCollection);
             midGammaDataSource.SetXMapping(x => dateMidGamma.ConvertToDouble(x.Date));
             midGammaDataSource.SetYMapping(y => y.Value);
             plotterMidGamma.AddLineGraph(midGammaDataSource, Colors.Violet, 2, "Mid Gamma");
 
-
-            // Stworzenie Connectora, czyli obiektu łączącego się z urządzeniem.
             connector = new Connector();
             connector.DeviceConnected += new EventHandler(OnDeviceConnected);
             connector.DeviceConnectFail += new EventHandler(OnDeviceFail);
             connector.DeviceValidating += new EventHandler(OnDeviceValidating);
 
             connector.ConnectScan("COM3");
-  
-            
-            // Włączenie detekcji mrugania.
-            //connector.setBlinkDetectionEnabled(true);
 
         }
-
-
 
         public void OnWindowClosing(object sender, CancelEventArgs e)
         {
@@ -147,21 +116,14 @@ namespace MindwaveApp
 
         public void OnDeviceConnected(object sender, EventArgs e)
         {
-           
-
             Connector.DeviceEventArgs de = (Connector.DeviceEventArgs)e;
-
             Dispatcher.Invoke(DispatcherPriority.Normal, (Action)(() =>
-            {
-                
+            {  
                 portTextBlock.Text = "Device found on: " + de.Device.PortName;
             }));
             de.Device.DataReceived += new EventHandler(OnDataReceived);
-
-
         }
 
-        // Called when scanning fails
         public void OnDeviceFail(object sender, EventArgs e)
         {
             Dispatcher.Invoke(DispatcherPriority.Normal, (Action)(() =>
@@ -171,50 +133,24 @@ namespace MindwaveApp
         }
 
 
-
-        // Called when each port is being validated
-
         public void OnDeviceValidating(object sender, EventArgs e)
         {
-
             Dispatcher.Invoke(DispatcherPriority.Normal, (Action)(() =>
             {
                 validatingTextBlock.Text += "Vali: ";
             }));
-
         }
 
-        // Called when data is received from a device
 
         public void OnDataReceived(object sender, EventArgs e)
         {
-
-            //Device d = (Device)sender;
-
             Device.DataEventArgs de = (Device.DataEventArgs)e;
             DataRow[] tempDataRowArray = de.DataRowArray;
-
             TGParser tgParser = new TGParser();
             tgParser.Read(de.DataRowArray);
 
-
-
-            /* Loops through the newly parsed data of the connected headset*/
-            // The comments below indicate and can be used to print out the different data outputs. 
-
             for (int i = 0; i < tgParser.ParsedData.Length; i++)
             {
-
-                //if (tgParser.ParsedData[i].ContainsKey("Raw"))
-                //{
-
-                //    //Console.WriteLine("Raw Value:" + tgParser.ParsedData[i]["Raw"]);
-                //    Dispatcher.Invoke(DispatcherPriority.Normal, (Action)(() =>
-                //    {
-                //        rawDataTextBlock.Text = "Raw Data: " + tgParser.ParsedData[i]["Raw"];
-                //    }));
-
-                //}
 
                 if (tgParser.ParsedData[i].ContainsKey("PoorSignal"))
                 {
@@ -227,17 +163,14 @@ namespace MindwaveApp
 
                 }
 
-
                 if (tgParser.ParsedData[i].ContainsKey("Attention"))
                 {
                     Dispatcher.Invoke(DispatcherPriority.Normal, (Action)(() =>
                     {
                         attentionTextBlock.Text = "Att Value:" + tgParser.ParsedData[i]["Attention"];
-                        attentionValuesCollection.Add(new DataValue(tgParser.ParsedData[i]["Attention"], DateTime.Now));
+                        attentionValuesCollection.Add(new Data(tgParser.ParsedData[i]["Attention"], DateTime.Now));
                     }));
-           
                 }
-
 
                 if (tgParser.ParsedData[i].ContainsKey("Meditation"))
                 {
@@ -246,10 +179,9 @@ namespace MindwaveApp
                     Dispatcher.Invoke(DispatcherPriority.Normal, (Action)(() =>
                     {
                         meditationTextBlock.Text = "Med Value:" + tgParser.ParsedData[i]["Meditation"];
-                        meditationValuesCollection.Add(new DataValue(tgParser.ParsedData[i]["Meditation"], DateTime.Now));
+                        meditationValuesCollection.Add(new Data(tgParser.ParsedData[i]["Meditation"], DateTime.Now));
                     }));
                 }
-
 
                 if (tgParser.ParsedData[i].ContainsKey("EegPowerDelta"))
                 {
@@ -257,31 +189,18 @@ namespace MindwaveApp
                     Dispatcher.Invoke(DispatcherPriority.Normal, (Action)(() =>
                     {
                         eegPowerDeltaTextBlock.Text = "Delta: " + tgParser.ParsedData[i]["EegPowerDelta"];
-                        deltaValuesCollection.Add(new DataValue(tgParser.ParsedData[i]["EegPowerDelta"], DateTime.Now));
+                        deltaValuesCollection.Add(new Data(tgParser.ParsedData[i]["EegPowerDelta"], DateTime.Now));
                     }));
 
 
                 }
-
-                //if (tgParser.ParsedData[i].ContainsKey("BlinkStrength"))
-                //{
-
-                //    //Console.WriteLine("Eyeblink " + tgParser.ParsedData[i]["BlinkStrength"]);
-
-                //    Dispatcher.Invoke(DispatcherPriority.Normal, (Action)(() =>
-                //    {
-                //        blinkStrengthTextBlock.Text = "Eyeblink " + tgParser.ParsedData[i]["BlinkStrength"];
-                        
-                //    }));
-
-                //}
 
                 if (tgParser.ParsedData[i].ContainsKey("EegPowerTheta"))
                 {
                     Dispatcher.Invoke(DispatcherPriority.Normal, (Action)(() =>
                     {
                         eegPowerThetaTextBlock.Text = "Theta " + tgParser.ParsedData[i]["EegPowerTheta"];
-                        thetaValuesCollection.Add(new DataValue(tgParser.ParsedData[i]["EegPowerTheta"], DateTime.Now));
+                        thetaValuesCollection.Add(new Data(tgParser.ParsedData[i]["EegPowerTheta"], DateTime.Now));
                     }));
                 }
 
@@ -290,7 +209,7 @@ namespace MindwaveApp
                     Dispatcher.Invoke(DispatcherPriority.Normal, (Action)(() =>
                     {
                         eegPowerAlpha1TextBlock.Text = "Alpha1: " + tgParser.ParsedData[i]["EegPowerAlpha1"];
-                        lowAlphaValuesCollection.Add(new DataValue(tgParser.ParsedData[i]["EegPowerAlpha1"], DateTime.Now));
+                        lowAlphaValuesCollection.Add(new Data(tgParser.ParsedData[i]["EegPowerAlpha1"], DateTime.Now));
                     }));
                 }
 
@@ -299,7 +218,7 @@ namespace MindwaveApp
                     Dispatcher.Invoke(DispatcherPriority.Normal, (Action)(() =>
                     {
                         eegPowerAlpha2TextBlock.Text = "Alpha2: " + tgParser.ParsedData[i]["EegPowerAlpha2"];
-                        highAlphaValuesCollection.Add(new DataValue(tgParser.ParsedData[i]["EegPowerAlpha2"], DateTime.Now));
+                        highAlphaValuesCollection.Add(new Data(tgParser.ParsedData[i]["EegPowerAlpha2"], DateTime.Now));
                     }));
                 }
 
@@ -308,7 +227,7 @@ namespace MindwaveApp
                     Dispatcher.Invoke(DispatcherPriority.Normal, (Action)(() =>
                     {
                         eegPowerGamma1TextBlock.Text = "Gamma1: " + tgParser.ParsedData[i]["EegPowerGamma1"];
-                        lowGammaValuesCollection.Add(new DataValue(tgParser.ParsedData[i]["EegPowerGamma1"], DateTime.Now));
+                        lowGammaValuesCollection.Add(new Data(tgParser.ParsedData[i]["EegPowerGamma1"], DateTime.Now));
                     }));
                 }
 
@@ -317,7 +236,7 @@ namespace MindwaveApp
                     Dispatcher.Invoke(DispatcherPriority.Normal, (Action)(() =>
                     {
                         eegPowerGamma2TextBlock.Text = "Gamma2: " + tgParser.ParsedData[i]["EegPowerGamma2"];
-                        midGammaValuesCollection.Add(new DataValue(tgParser.ParsedData[i]["EegPowerGamma2"], DateTime.Now));
+                        midGammaValuesCollection.Add(new Data(tgParser.ParsedData[i]["EegPowerGamma2"], DateTime.Now));
                     }));
                 }
 
@@ -325,8 +244,7 @@ namespace MindwaveApp
                 {
                     Dispatcher.Invoke(DispatcherPriority.Normal, (Action)(() =>
                     {
-                        //eegPowerGamma2TextBlock.Text = "Gamma2: " + tgParser.ParsedData[i]["EegPowerGamma2"];
-                        lowBetaValuesCollection.Add(new DataValue(tgParser.ParsedData[i]["EegPowerBeta1"], DateTime.Now));
+                        lowBetaValuesCollection.Add(new Data(tgParser.ParsedData[i]["EegPowerBeta1"], DateTime.Now));
                     }));
                 }
 
@@ -334,30 +252,10 @@ namespace MindwaveApp
                 {
                     Dispatcher.Invoke(DispatcherPriority.Normal, (Action)(() =>
                     {
-                        //eegPowerGamma2TextBlock.Text = "Gamma2: " + tgParser.ParsedData[i]["EegPowerGamma2"];
-                        highBetaValuesCollection.Add(new DataValue(tgParser.ParsedData[i]["EegPowerBeta2"], DateTime.Now));
+                        highBetaValuesCollection.Add(new Data(tgParser.ParsedData[i]["EegPowerBeta2"], DateTime.Now));
                     }));
                 }
-
-
-                
-
             }
-
-        }
-
-
-        public void MakeRelative(DataCollection collection)
-        {
-            DataCollection temp = new DataCollection();
-
-
-            for (int i = 0; i < collection.Count; i++)
-            {
-                temp.Add(new DataValue( (collection[i].Value / collection.MaxValue) * 100, collection[i].Date));
-            }
-
-            collection = temp;
         }
     }
 }

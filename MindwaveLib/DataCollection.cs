@@ -6,39 +6,26 @@ using Microsoft.Research.DynamicDataDisplay.Common;
 
 namespace MindwaveLib
 {
-    public class DataCollection : RingArray<DataValue>
+    public class DataCollection : RingArray<Data>
     {
-        // Trzeba to rozszerzyć.
-        private const int MAX_ELEMENTS = 300;
-        public double MaxValue { get; set; }
-
-        public DataCollection() : base(MAX_ELEMENTS)
+        private const int _max = 300;
+        public DataCollection() : base(_max)
         {
         }
-
-        public void Add(DataValue item)
+        public void Add(Data item)
         {
             base.Add(item);
-            if(MaxValue < item.Value)
-            {
-                MaxValue = item.Value;
-            }
         }
-
-
     }
 
-    public class DataValue
+    public class Data
     {
+        public double Value { get; set; }
         public DateTime Date { get; set; }
-        public double Value { get; set;}
-
-        public DataValue(double value, DateTime date)
+        public Data(double value, DateTime date)
         {
             this.Date = date;
             this.Value = value;
         }
-
-
     }
 }

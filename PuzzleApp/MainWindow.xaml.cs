@@ -66,7 +66,7 @@ namespace PuzzleApp
 
             attentionValuesCollection = new DataCollection();
 
-            var attentionDataSource = new EnumerableDataSource<DataValue>(attentionValuesCollection);
+            var attentionDataSource = new EnumerableDataSource<Data>(attentionValuesCollection);
             attentionDataSource.SetXMapping(x => dateAttention.ConvertToDouble(x.Date));
             attentionDataSource.SetYMapping(y => y.Value);
             plotterAttention.AddLineGraph(attentionDataSource, Colors.Red, 2, "Attetion");
@@ -218,7 +218,7 @@ namespace PuzzleApp
                     {
                         attentionTextBlock.Text = "Att Value:" + tgParser.ParsedData[i]["Attention"];
                         Attention.Text = tgParser.ParsedData[i]["Attention"].ToString();
-                        attentionValuesCollection.Add(new DataValue(tgParser.ParsedData[i]["Attention"], DateTime.Now));
+                        attentionValuesCollection.Add(new Data(tgParser.ParsedData[i]["Attention"], DateTime.Now));
 
                         //Puzzle solving statistics.
                         attentionValueSum += (int)tgParser.ParsedData[i]["Attention"];

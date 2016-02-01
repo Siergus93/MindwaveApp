@@ -18,171 +18,116 @@
             <TextBlock x:Name="eegPowerAlpha2TextBlock" Text="EegPowerAlpha2Value"/>
             <TextBlock x:Name="eegPowerGamma1TextBlock" Text="EegPowerGamma1Value"/>
             <TextBlock x:Name="eegPowerGamma2TextBlock" Text="EegPowerGamma2Value"/>
-
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
-                
                 <d3:ChartPlotter x:Name="plotterAttention" Grid.Column="0">
-
                     <d3:ChartPlotter.HorizontalAxis>
                         <d3:HorizontalDateTimeAxis x:Name="dateAttention"/>
                     </d3:ChartPlotter.HorizontalAxis>
-
                     <d3:Header FontFamily="Arial" Content="Attention"/>
                     <d3:VerticalAxisTitle FontFamily="Arial" Content="valueAxis"/>
                     <d3:HorizontalAxisTitle FontFamily="Arial" Content="dateAxis"/>
-
                 </d3:ChartPlotter>
-
                 <d3:ChartPlotter x:Name="plotterMeditation" Grid.Column="1">
-
                     <d3:ChartPlotter.HorizontalAxis>
                         <d3:HorizontalDateTimeAxis x:Name="dateMeditation"/>
                     </d3:ChartPlotter.HorizontalAxis>
-
                     <d3:Header FontFamily="Arial" Content="Meditation"/>
                     <d3:VerticalAxisTitle FontFamily="Arial" Content="valueAxis"/>
                     <d3:HorizontalAxisTitle FontFamily="Arial" Content="dateAxis"/>
-                    
                 </d3:ChartPlotter>
             </Grid>
-
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
-
                 <d3:ChartPlotter x:Name="plotterDelta" Grid.Column="0">
-
                     <d3:ChartPlotter.HorizontalAxis>
                         <d3:HorizontalDateTimeAxis x:Name="dateDelta"/>
                     </d3:ChartPlotter.HorizontalAxis>
-
                     <d3:Header FontFamily="Arial" Content="Delta"/>
                     <d3:VerticalAxisTitle FontFamily="Arial" Content="valueAxis"/>
                     <d3:HorizontalAxisTitle FontFamily="Arial" Content="dateAxis"/>
-
                 </d3:ChartPlotter>
-
                 <d3:ChartPlotter x:Name="plotterTheta" Grid.Column="1">
-
                     <d3:ChartPlotter.HorizontalAxis>
                         <d3:HorizontalDateTimeAxis x:Name="dateTheta"/>
                     </d3:ChartPlotter.HorizontalAxis>
-
                     <d3:Header FontFamily="Arial" Content="Theta"/>
                     <d3:VerticalAxisTitle FontFamily="Arial" Content="valueAxis"/>
                     <d3:HorizontalAxisTitle FontFamily="Arial" Content="dateAxis"/>
-
                 </d3:ChartPlotter>
-
             </Grid>
-
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
-
                 <d3:ChartPlotter x:Name="plotterLowAlpha" Grid.Column="0">
-
                     <d3:ChartPlotter.HorizontalAxis>
                         <d3:HorizontalDateTimeAxis x:Name="dateLowAlpha"/>
                     </d3:ChartPlotter.HorizontalAxis>
-
                     <d3:Header FontFamily="Arial" Content="LowAlpha"/>
                     <d3:VerticalAxisTitle FontFamily="Arial" Content="valueAxis"/>
                     <d3:HorizontalAxisTitle FontFamily="Arial" Content="dateAxis"/>
-
                 </d3:ChartPlotter>
-
                 <d3:ChartPlotter x:Name="plotterHighAlpha" Grid.Column="1">
-
                     <d3:ChartPlotter.HorizontalAxis>
                         <d3:HorizontalDateTimeAxis x:Name="dateHighAlpha"/>
                     </d3:ChartPlotter.HorizontalAxis>
-
                     <d3:Header FontFamily="Arial" Content="HighAlpha"/>
                     <d3:VerticalAxisTitle FontFamily="Arial" Content="valueAxis"/>
                     <d3:HorizontalAxisTitle FontFamily="Arial" Content="dateAxis"/>
-
                 </d3:ChartPlotter>
-
             </Grid>
-
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
-
                 <d3:ChartPlotter x:Name="plotterLowBeta" Grid.Column="0">
-
                     <d3:ChartPlotter.HorizontalAxis>
                         <d3:HorizontalDateTimeAxis x:Name="dateLowBeta"/>
                     </d3:ChartPlotter.HorizontalAxis>
-
                     <d3:Header FontFamily="Arial" Content="LowBeta"/>
                     <d3:VerticalAxisTitle FontFamily="Arial" Content="valueAxis"/>
                     <d3:HorizontalAxisTitle FontFamily="Arial" Content="dateAxis"/>
-
                 </d3:ChartPlotter>
-
                 <d3:ChartPlotter x:Name="plotterHighBeta" Grid.Column="1">
-
                     <d3:ChartPlotter.HorizontalAxis>
                         <d3:HorizontalDateTimeAxis x:Name="dateHighBeta"/>
                     </d3:ChartPlotter.HorizontalAxis>
-
                     <d3:Header FontFamily="Arial" Content="HighBeta"/>
                     <d3:VerticalAxisTitle FontFamily="Arial" Content="valueAxis"/>
                     <d3:HorizontalAxisTitle FontFamily="Arial" Content="dateAxis"/>
-
                 </d3:ChartPlotter>
-
-
             </Grid>
-
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
-
                 <d3:ChartPlotter x:Name="plotterLowGamma" Grid.Column="0">
-
                     <d3:ChartPlotter.HorizontalAxis>
                         <d3:HorizontalDateTimeAxis x:Name="dateLowGamma"/>
                     </d3:ChartPlotter.HorizontalAxis>
-
                     <d3:Header FontFamily="Arial" Content="LowGamma"/>
                     <d3:VerticalAxisTitle FontFamily="Arial" Content="valueAxis"/>
                     <d3:HorizontalAxisTitle FontFamily="Arial" Content="dateAxis"/>
-
                 </d3:ChartPlotter>
-
                 <d3:ChartPlotter x:Name="plotterMidGamma" Grid.Column="1">
-
                     <d3:ChartPlotter.HorizontalAxis>
                         <d3:HorizontalDateTimeAxis x:Name="dateMidGamma"/>
                     </d3:ChartPlotter.HorizontalAxis>
-
                     <d3:Header FontFamily="Arial" Content="MidGamma"/>
                     <d3:VerticalAxisTitle FontFamily="Arial" Content="valueAxis"/>
                     <d3:HorizontalAxisTitle FontFamily="Arial" Content="dateAxis"/>
-
                 </d3:ChartPlotter>
-
-
             </Grid>
-
-
-
-
         </StackPanel>
     </ScrollViewer>
 </Window>

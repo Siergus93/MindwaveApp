@@ -56,10 +56,12 @@
     <Content Include="libs\Jayrock.Json.dll" />
     <Content Include="libs\Jayrock.LICENSE.txt" />
     <Content Include="libs\libUCLA.dll" />
+    <Content Include="libs\libxs.dll" />
     <Content Include="libs\NLog.dll" />
     <Content Include="libs\NLog.LICENSE.txt" />
     <Content Include="libs\NLog.xml" />
     <Content Include="libs\ThinkGear.dll" />
+    <Content Include="libs\ThinkGearNET.dll" />
   </ItemGroup>
   <ItemGroup>
     <None Include="libs\NLog.config" />
