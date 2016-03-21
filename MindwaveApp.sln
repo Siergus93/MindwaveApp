@@ -14,8 +14,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "sjp-20151013", "sjp-2015101
 		sjp-20151013\slowa-win.txt = sjp-20151013\slowa-win.txt
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReceivingApp", "ReceivingApp\ReceivingApp.csproj", "{75D92778-9B2C-4B38-85A5-8CE0AD810442}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PuzzleApp2", "PuzzleApp2\PuzzleApp2.csproj", "{1D664F90-75CE-4F73-A895-52CEE04EA54B}"
 EndProject
 Global
@@ -32,10 +30,6 @@ Global
 		{BBF56637-5766-4A70-9C7D-1BA322BA32E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BBF56637-5766-4A70-9C7D-1BA322BA32E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BBF56637-5766-4A70-9C7D-1BA322BA32E0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{75D92778-9B2C-4B38-85A5-8CE0AD810442}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{75D92778-9B2C-4B38-85A5-8CE0AD810442}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{75D92778-9B2C-4B38-85A5-8CE0AD810442}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{75D92778-9B2C-4B38-85A5-8CE0AD810442}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1D664F90-75CE-4F73-A895-52CEE04EA54B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1D664F90-75CE-4F73-A895-52CEE04EA54B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1D664F90-75CE-4F73-A895-52CEE04EA54B}.Release|Any CPU.ActiveCfg = Release|Any CPU

@@ -20,7 +20,6 @@ using ThinkGearNET;
 using Microsoft.Research.DynamicDataDisplay;
 using Microsoft.Research.DynamicDataDisplay.DataSources;
 using System.IO;
-using libUCLA;
 
 namespace PuzzleApp2
 {
@@ -41,8 +40,6 @@ namespace PuzzleApp2
         public int puzzlesSolved;
         public string currentWord;
         public string previousWord;
-        ULoader_JSON config;
-        USender uSender;
 
         public MainWindow()
         {
@@ -61,8 +58,6 @@ namespace PuzzleApp2
             attentionValueSum = 0;
             puzzlesSolved = 0;
             currentWord = "";
-            config = new ULoader_JSON("config.json");
-            uSender = config.GetSender("output1");
         }
 
         public string GetWord()
@@ -102,16 +97,6 @@ namespace PuzzleApp2
                 attentionValuesCollection.Add(new Data(attentionValue, DateTime.Now));
                 attentionValueSum += (int)attentionValue;
                 attentionComingCounter += 1;
-                try
-                {
-                    byte[] data = BitConverter.GetBytes(attentionValue);
-                    uSender.SendData(data);
-                    Console.WriteLine("AV: " + attentionValue + " T: " + DateTime.UtcNow.ToString());                    
-                }
-                catch (UException exc)
-                {
-                    Console.WriteLine(exc.Message);
-                }
             }));
             Thread.Sleep(1000);
         }
