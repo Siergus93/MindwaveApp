@@ -32,6 +32,11 @@
                VerticalAlignment="Center"
                >
         </Label>
+        <ListView x:Name="wordsListView"
+                  Grid.Column="2"
+                  Grid.ColumnSpan="3"
+                  Visibility="Hidden"
+                  />
         <d3:ChartPlotter
             Grid.Column="1"
             Grid.Row="1"
@@ -50,9 +55,10 @@
                     Grid.Row="1">
             <TextBlock x:Name="poorSignalTextBlock" Text="poorSignalValue" TextWrapping="Wrap" />
             <TextBlock x:Name="attentionTextBlock" Text="AttentionValue" TextWrapping="Wrap"/>
-            <ComboBox x:Name="portsComboBox" ></ComboBox>
+            <ComboBox x:Name="portsComboBox" SelectedIndex="1"></ComboBox>
             <Button x:Name="connectButton" Height="24" Content="Connect" Click="connectButton_Click"></Button>
+            <ComboBox x:Name="puzzleChoiceComboBox" SelectionChanged="puzzleChoiceComboBox_SelectionChanged" SelectedIndex="0"></ComboBox>
         </StackPanel>
-        <Button x:Name="StartButton" Content="Next puzzle!" Click="StartButton_Click" FontSize="20" Background="#FFADE635"/>
+        <Button x:Name="StartButton" Content="Next puzzle!" Click="NextPuzzleButton_Click" FontSize="20" Background="#FFADE635"/>
     </Grid>
 </Window>

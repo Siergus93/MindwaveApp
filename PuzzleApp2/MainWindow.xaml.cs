@@ -23,9 +23,6 @@ using System.IO;
 
 namespace PuzzleApp2
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
         private ThinkGearWrapper _thinkGearWrapper;
@@ -41,12 +38,30 @@ namespace PuzzleApp2
         public string currentWord;
         public string previousWord;
 
+        
+        //StroopEffect Section!
+        public string[] colorsStrings = { "Zielony", "Czerwony", "Niebieski", "Żółty", "Pomarańczowy", "Różowy", "Fioletowy" };
+        public Color[] colorsConstants = { Colors.Green, Colors.Red, Colors.Blue, Colors.Yellow, Colors.Orange, Colors.Pink, Colors.Violet };
+        public string[] puzzleChoice = { "ReversedWord", "StroopEffect" };
+        
+
+        public ListViewItem listViewColors;
+        
         public MainWindow()
         {
             InitializeComponent();
+
+            //zmienic to!
             foreach (string port in SerialPort.GetPortNames())
+            {
                 portsComboBox.Items.Add(port);
-            portsComboBox.SelectedIndex = 1;
+            }
+
+            foreach (string choice in puzzleChoice)
+	        {
+                puzzleChoiceComboBox.Items.Add(choice);
+	        }
+
             attentionValuesCollection = new DataCollection();
             var attentionDataSource = new EnumerableDataSource<Data>(attentionValuesCollection);
             attentionDataSource.SetXMapping(x => dateAttention.ConvertToDouble(x.Date));
@@ -58,6 +73,8 @@ namespace PuzzleApp2
             attentionValueSum = 0;
             puzzlesSolved = 0;
             currentWord = "";
+
+            listViewColors = new ListViewItem();
         }
 
         public string GetWord()
@@ -110,18 +127,30 @@ namespace PuzzleApp2
                 MessageBox.Show("Could not connect to headset!");
             }
         }
-        private void StartButton_Click(object sender, RoutedEventArgs e)
+        private void NextPuzzleButton_Click(object sender, RoutedEventArgs e)
         {
-            currentWord = GetWord();
-            WordLabel.Content = ReverseWord(currentWord.ToUpper());
-            if (puzzlesSolved > 0 && attentionComingCounter > 0)
+            //Reversed Word Puzzle Section
+            if (puzzleChoiceComboBox.SelectedIndex == 0)
             {
-                Console.WriteLine("w: " + previousWord + " l: " + previousWord.Length + " av: " + attentionValueSum / attentionComingCounter);
+                currentWord = GetWord();
+                WordLabel.Content = ReverseWord(currentWord.ToUpper());
+                if (puzzlesSolved > 0 && attentionComingCounter > 0)
+                {
+                    Console.WriteLine("w: " + previousWord + " l: " + previousWord.Length + " av: " + attentionValueSum / attentionComingCounter);
+                }
+                puzzlesSolved++;
+                attentionComingCounter = 0;
+                attentionValueSum = 0;
+                previousWord = currentWord;
             }
-            puzzlesSolved++;
-            attentionComingCounter = 0;
-            attentionValueSum = 0;
-            previousWord = currentWord;
+            //Stroop Effect Puzzle Section
+            else if (puzzleChoiceComboBox.SelectedIndex == 1)
+            {
+                WordLabel.Visibility = System.Windows.Visibility.Hidden;
+                wordsListView.Visibility = System.Windows.Visibility.Visible;
+
+            }
+
         }
 
         public string ReverseWord(string word)
@@ -129,6 +158,23 @@ namespace PuzzleApp2
             char[] array = word.ToCharArray();
             Array.Reverse(array);
             return new string(array);
+        }
+
+        private void puzzleChoiceComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            //Reversed Word Puzzle Section
+            if( puzzleChoiceComboBox.SelectedIndex == 0 )
+            {
+                WordLabel.Visibility = System.Windows.Visibility.Visible;
+                wordsListView.Visibility = System.Windows.Visibility.Hidden;
+            }
+            //Stroop Effect Puzzle Section
+            else if (puzzleChoiceComboBox.SelectedIndex == 1)
+            {
+                WordLabel.Visibility = System.Windows.Visibility.Hidden;
+                wordsListView.Visibility = System.Windows.Visibility.Visible;
+
+            }
         }
     }
 }
