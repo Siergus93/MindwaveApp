@@ -21,6 +21,7 @@
                    Text="AT"
                    FontSize="64">
         </TextBlock>
+        
         <Label x:Name="WordLabel"
                FontSize="72"
                Content="WordLabel"
@@ -30,13 +31,34 @@
                Grid.ColumnSpan="3"
                HorizontalAlignment="Center"
                VerticalAlignment="Center"
+               Visibility="Hidden"
                >
         </Label>
-        <ListView x:Name="wordsListView"
-                  Grid.Column="2"
-                  Grid.ColumnSpan="3"
-                  Visibility="Hidden"
-                  />
+        
+        <Grid x:Name="colorWordsGrid"
+                Grid.Column="2"
+                Grid.ColumnSpan="3"
+                Visibility="Visible"
+                Background="Black"
+              >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Grid.Column="1"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        >
+                <Label x:Name="color1Label" FontSize="40">Color1</Label>
+                <Label x:Name="color2Label" FontSize="40">Color2</Label>
+                <Label x:Name="color3Label" FontSize="40">Color3</Label>
+                <Label x:Name="color4Label" FontSize="40">Color4</Label>
+                <Label x:Name="color5Label" FontSize="40">Color5</Label>
+            </StackPanel>
+        </Grid>
+
         <d3:ChartPlotter
             Grid.Column="1"
             Grid.Row="1"

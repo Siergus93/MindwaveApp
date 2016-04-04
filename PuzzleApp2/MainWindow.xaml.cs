@@ -26,9 +26,12 @@ namespace PuzzleApp2
     public partial class MainWindow : Window
     {
         private ThinkGearWrapper _thinkGearWrapper;
+
+        private bool deviceIsConnected = false; 
+
         public float attentionValue;
         public const int MaxWordNumber = 2709804;
-        public static Random randomWordNumber;
+        public static Random randomNumber;
         public string path = @"..\..\..\sjp-20151013\slowa-win-utf8.txt";
         public int wordNumber;
         public DataCollection attentionValuesCollection;
@@ -41,21 +44,31 @@ namespace PuzzleApp2
         
         //StroopEffect Section!
         public string[] colorsStrings = { "Zielony", "Czerwony", "Niebieski", "Żółty", "Pomarańczowy", "Różowy", "Fioletowy" };
-        public Color[] colorsConstants = { Colors.Green, Colors.Red, Colors.Blue, Colors.Yellow, Colors.Orange, Colors.Pink, Colors.Violet };
+        public Color[] colorsConstants = { Colors.Green, Colors.Red, Colors.DeepSkyBlue, Colors.Yellow, Colors.OrangeRed, Colors.Fuchsia, Colors.Indigo };
+       
         public string[] puzzleChoice = { "ReversedWord", "StroopEffect" };
-        
-
-        public ListViewItem listViewColors;
-        
+                  
         public MainWindow()
         {
+            
             InitializeComponent();
 
+            _thinkGearWrapper = new ThinkGearWrapper();
+
             //zmienic to!
-            foreach (string port in SerialPort.GetPortNames())
+
+            var ports = SerialPort.GetPortNames();
+
+            if (ports.Length > 0)
             {
-                portsComboBox.Items.Add(port);
+                foreach (string port in SerialPort.GetPortNames())
+                {
+                    portsComboBox.Items.Add(port);
+                }
+                portsComboBox.SelectedIndex = 0;
             }
+            else
+                connectButton.IsEnabled = false;
 
             foreach (string choice in puzzleChoice)
 	        {
@@ -67,20 +80,52 @@ namespace PuzzleApp2
             attentionDataSource.SetXMapping(x => dateAttention.ConvertToDouble(x.Date));
             attentionDataSource.SetYMapping(y => y.Value);
             plotterAttention.AddLineGraph(attentionDataSource, Colors.Red, 2, "Attention");
-            randomWordNumber = new Random();
+            randomNumber = RandomProvider.GetThreadRandom();
             wordNumber = 0;
             attentionComingCounter = 0;
             attentionValueSum = 0;
             puzzlesSolved = 0;
             currentWord = "";
 
-            listViewColors = new ListViewItem();
         }
 
         public string GetWord()
         {
-            wordNumber = randomWordNumber.Next(0, MaxWordNumber);
+            wordNumber = randomNumber.Next(0, MaxWordNumber);
             return ReadWord(path, wordNumber);
+        }
+
+        public int[] GetRandomNumbers(int howMany)
+        {
+            int[] result = new int[howMany];
+
+            for (int i = 0; i < howMany; i++ )
+            {
+                result[i]= randomNumber.Next(0, colorsStrings.Length);
+            }
+
+            randomNumber = RandomProvider.GetThreadRandom();
+            return result;
+        }
+
+        public string[] GetColorsNames(int[] inputArray)
+        {
+            string[] result = new string[inputArray.Length];
+            for(int i = 0; i < inputArray.Length; i++)
+            {
+                result[i] = colorsStrings[inputArray[i]];
+            }
+            return result;
+        }
+
+        public Color[] GetColorsContants(int[] inputArray)
+        {
+            Color[] result = new Color[inputArray.Length];
+            for (int i = 0; i < inputArray.Length; i++)
+            {
+                result[i] = colorsConstants[inputArray[i]];
+            }
+            return result;
         }
 
         public string ReadWord(string path, int line)
@@ -120,13 +165,26 @@ namespace PuzzleApp2
 
         private void connectButton_Click(object sender, RoutedEventArgs e)
         {
-            _thinkGearWrapper = new ThinkGearWrapper();
-            _thinkGearWrapper.ThinkGearChanged += _thinkGearWrapper_ThinkGearChanged;
-            if (!_thinkGearWrapper.Connect(portsComboBox.SelectedItem.ToString(), 57600, true))
+            if(!deviceIsConnected)
             {
-                MessageBox.Show("Could not connect to headset!");
+                _thinkGearWrapper.ThinkGearChanged += _thinkGearWrapper_ThinkGearChanged;
+                if (!_thinkGearWrapper.Connect(portsComboBox.SelectedItem.ToString(), 57600, true))
+                {
+                    MessageBox.Show("Could not connect to headset!");
+                }
+                else
+                    deviceIsConnected = true;
+
+                connectButton.Content = "Disconnect";
+            }
+            else
+            {
+                _thinkGearWrapper.Disconnect();
+                connectButton.Content = "Connect";
+                deviceIsConnected = false;
             }
         }
+
         private void NextPuzzleButton_Click(object sender, RoutedEventArgs e)
         {
             //Reversed Word Puzzle Section
@@ -146,9 +204,27 @@ namespace PuzzleApp2
             //Stroop Effect Puzzle Section
             else if (puzzleChoiceComboBox.SelectedIndex == 1)
             {
-                WordLabel.Visibility = System.Windows.Visibility.Hidden;
-                wordsListView.Visibility = System.Windows.Visibility.Visible;
+                //foreach (var item in GetColorsNames(GetRandomNumbers(5)))
+                //{
+                //    Console.WriteLine(item);
+                //}
+                string[] data = GetColorsNames(GetRandomNumbers(5));
+                Color[] colorData = GetColorsContants(GetRandomNumbers(5));
 
+                color1Label.Content = data[0];
+                color1Label.Foreground = new SolidColorBrush(colorData[0]);
+
+                color2Label.Content = data[1];
+                color2Label.Foreground = new SolidColorBrush(colorData[1]);
+
+                color3Label.Content = data[2];
+                color3Label.Foreground = new SolidColorBrush(colorData[2]);
+
+                color4Label.Content = data[3];
+                color4Label.Foreground = new SolidColorBrush(colorData[3]);
+
+                color5Label.Content = data[4];
+                color5Label.Foreground = new SolidColorBrush(colorData[4]);
             }
 
         }
@@ -166,15 +242,17 @@ namespace PuzzleApp2
             if( puzzleChoiceComboBox.SelectedIndex == 0 )
             {
                 WordLabel.Visibility = System.Windows.Visibility.Visible;
-                wordsListView.Visibility = System.Windows.Visibility.Hidden;
+                colorWordsGrid.Visibility = System.Windows.Visibility.Hidden;
             }
             //Stroop Effect Puzzle Section
             else if (puzzleChoiceComboBox.SelectedIndex == 1)
             {
                 WordLabel.Visibility = System.Windows.Visibility.Hidden;
-                wordsListView.Visibility = System.Windows.Visibility.Visible;
+                colorWordsGrid.Visibility = System.Windows.Visibility.Visible;
 
             }
         }
+
+        
     }
 }
