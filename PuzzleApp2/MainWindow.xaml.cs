@@ -41,12 +41,19 @@ namespace PuzzleApp2
         public string currentWord;
         public string previousWord;
 
+        //matrtca 10x10, liczby od 0 do 100, losowe.., wyswietlanie jednej z liczb i szukanie jej i nastepnych...
+
+        //- dorzucic ograniczenie czasowe do efektu strooopa i macierzy! :]
+
+        //public int[10][10] dataTable;
+
         
         //StroopEffect Section!
-        public string[] colorsStrings = { "Zielony", "Czerwony", "Niebieski", "Żółty", "Pomarańczowy", "Różowy", "Fioletowy" };
-        public Color[] colorsConstants = { Colors.Green, Colors.Red, Colors.DeepSkyBlue, Colors.Yellow, Colors.OrangeRed, Colors.Fuchsia, Colors.Indigo };
-       
-        public string[] puzzleChoice = { "ReversedWord", "StroopEffect" };
+        
+        public string[] colorsStrings = { "Zielony", "Czerwony", "Niebieski", "Żółty", "Fioletowy" };
+        public Color[] colorsConstants = { Colors.Green, Colors.Red, Colors.DeepSkyBlue, Colors.Yellow, Colors.DarkOrchid };
+        
+        public string[] puzzleChoice = { "ReversedWord", "StroopEffect", "MatrixQuest" };
                   
         public MainWindow()
         {
@@ -85,7 +92,7 @@ namespace PuzzleApp2
             attentionComingCounter = 0;
             attentionValueSum = 0;
             puzzlesSolved = 0;
-            currentWord = "";
+            currentWord = "";       
 
         }
 
@@ -95,35 +102,48 @@ namespace PuzzleApp2
             return ReadWord(path, wordNumber);
         }
 
-        public int[] GetRandomNumbers(int howMany)
+        public List<int> GetRandomNumbers(int howMany)
         {
-            int[] result = new int[howMany];
+            List<int> result = new List<int>();
 
-            for (int i = 0; i < howMany; i++ )
+            for (int i = 0; i < howMany; )
             {
-                result[i]= randomNumber.Next(0, colorsStrings.Length);
+                int rand = randomNumber.Next(0, colorsStrings.Length);
+                if (!result.Contains(rand))
+                {
+                    result.Add(rand);
+                    i++;
+                }                
             }
+
+            foreach (int item in result)
+            {
+                Console.Write(item + " ");
+                
+            }
+            Console.WriteLine();
+            
 
             randomNumber = RandomProvider.GetThreadRandom();
             return result;
         }
 
-        public string[] GetColorsNames(int[] inputArray)
+        public List<string> GetColorsNames(List<int> inputArray)
         {
-            string[] result = new string[inputArray.Length];
-            for(int i = 0; i < inputArray.Length; i++)
+            List<string> result = new List<string>();
+            for(int i = 0; i < inputArray.Count; i++)
             {
-                result[i] = colorsStrings[inputArray[i]];
+                result.Add(colorsStrings[inputArray[i]]);
             }
             return result;
         }
 
-        public Color[] GetColorsContants(int[] inputArray)
+        public List<Color> GetColorsContants(List<int> inputArray)
         {
-            Color[] result = new Color[inputArray.Length];
-            for (int i = 0; i < inputArray.Length; i++)
+            List<Color> result = new List<Color>();
+            for (int i = 0; i < inputArray.Count; i++)
             {
-                result[i] = colorsConstants[inputArray[i]];
+                result.Add(colorsConstants[inputArray[i]]);
             }
             return result;
         }
@@ -208,8 +228,8 @@ namespace PuzzleApp2
                 //{
                 //    Console.WriteLine(item);
                 //}
-                string[] data = GetColorsNames(GetRandomNumbers(5));
-                Color[] colorData = GetColorsContants(GetRandomNumbers(5));
+                List<string> data = GetColorsNames(GetRandomNumbers(5));
+                List<Color> colorData = GetColorsContants(GetRandomNumbers(5));
 
                 color1Label.Content = data[0];
                 color1Label.Foreground = new SolidColorBrush(colorData[0]);
@@ -225,6 +245,12 @@ namespace PuzzleApp2
 
                 color5Label.Content = data[4];
                 color5Label.Foreground = new SolidColorBrush(colorData[4]);
+            }
+            else if (puzzleChoiceComboBox.SelectedIndex == 2)
+            {
+                List<List<int>> result = MatrixGenerator.GetMatrix(36);
+                matrixQuestView.ItemsSource = result;
+                //matrixQuestView.Visibility = System.Windows.Visibility.Visible;
             }
 
         }
@@ -243,13 +269,21 @@ namespace PuzzleApp2
             {
                 WordLabel.Visibility = System.Windows.Visibility.Visible;
                 colorWordsGrid.Visibility = System.Windows.Visibility.Hidden;
+                matrixQuestView.Visibility = System.Windows.Visibility.Hidden;
             }
             //Stroop Effect Puzzle Section
             else if (puzzleChoiceComboBox.SelectedIndex == 1)
             {
                 WordLabel.Visibility = System.Windows.Visibility.Hidden;
                 colorWordsGrid.Visibility = System.Windows.Visibility.Visible;
+                matrixQuestView.Visibility = System.Windows.Visibility.Hidden;
 
+            }
+            else if (puzzleChoiceComboBox.SelectedIndex == 2)
+            {
+                WordLabel.Visibility = System.Windows.Visibility.Hidden;
+                colorWordsGrid.Visibility = System.Windows.Visibility.Hidden;
+                matrixQuestView.Visibility = System.Windows.Visibility.Visible;
             }
         }
 

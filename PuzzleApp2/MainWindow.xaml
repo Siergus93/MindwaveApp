@@ -3,6 +3,24 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d3="http://research.microsoft.com/DynamicDataDisplay/1.0"
         Title="MainWindow" Height="720" Width="1280">
+
+    <Window.Resources>
+        <DataTemplate x:Key="DataTemplate_Level2">
+            <Button Content="{Binding}" Height="40" Width="40" Margin="4,4,4,4"/>
+        </DataTemplate>
+
+        <DataTemplate x:Key="DataTemplate_Level1">
+            <ItemsControl ItemsSource="{Binding}" ItemTemplate="{DynamicResource DataTemplate_Level2}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+        </DataTemplate>
+
+    </Window.Resources>
+
     <Grid Margin="20">
         <Grid.RowDefinitions>
             <RowDefinition></RowDefinition>
@@ -35,10 +53,11 @@
                >
         </Label>
         
+
         <Grid x:Name="colorWordsGrid"
                 Grid.Column="2"
                 Grid.ColumnSpan="3"
-                Visibility="Visible"
+                Visibility="Hidden"
                 Background="Black"
               >
             <Grid.ColumnDefinitions>
@@ -47,17 +66,33 @@
                 <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
 
+            <Grid Grid.Column="0" Background="Green"></Grid>
+            <Grid Grid.Column="2" Background="Blue" ></Grid> 
+            
             <StackPanel Grid.Column="1"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Top"
+                        HorizontalAlignment="Stretch"
+                        
+                        VerticalAlignment="Stretch" Background="Black"
                         >
-                <Label x:Name="color1Label" FontSize="40">Color1</Label>
-                <Label x:Name="color2Label" FontSize="40">Color2</Label>
-                <Label x:Name="color3Label" FontSize="40">Color3</Label>
-                <Label x:Name="color4Label" FontSize="40">Color4</Label>
-                <Label x:Name="color5Label" FontSize="40">Color5</Label>
+                <Label x:Name="color1Label" FontSize="40" HorizontalAlignment="Center">Color1</Label>
+                <Label x:Name="color2Label" FontSize="40" HorizontalAlignment="Center">Color2</Label>
+                <Label x:Name="color3Label" FontSize="40" HorizontalAlignment="Center">Color3</Label>
+                <Label x:Name="color4Label" FontSize="40" HorizontalAlignment="Center">Color4</Label>
+                <Label x:Name="color5Label" FontSize="40" HorizontalAlignment="Center">Color5</Label>
             </StackPanel>
         </Grid>
+
+        <Grid
+             Grid.Column="2"
+             Grid.ColumnSpan="3"
+             Visibility="Visible"
+             Background="Black"
+             HorizontalAlignment="Stretch"
+             VerticalAlignment="Stretch"
+            >
+            <ItemsControl x:Name="matrixQuestView" ItemTemplate="{DynamicResource DataTemplate_Level1}"/>
+        </Grid>
+
 
         <d3:ChartPlotter
             Grid.Column="1"
