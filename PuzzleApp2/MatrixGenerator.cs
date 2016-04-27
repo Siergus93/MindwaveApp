@@ -47,11 +47,11 @@ namespace PuzzleApp2
             return result;
         }
 
-        public static List<List<int>> GetMatrix(int count)
+        public static List<List<string>> GetMatrix(int count)
         {
             int size = (int)Math.Sqrt((double)count);
-            List<List<int>> matrixResult = new List<List<int>>();
-            matrixResult.Add(new List<int>());
+            List<List<string>> matrixResult = new List<List<string>>();
+            matrixResult.Add(new List<string>());
 
             GenerateSequence(count);
             ShuffleSequence();
@@ -63,16 +63,38 @@ namespace PuzzleApp2
                 if( i != 0 && i % size == 0)
                 {
                     j++;
-                    matrixResult.Add(new List<int>());
+                    matrixResult.Add(new List<string>());
                     k = 0;
                     Console.WriteLine();
                 }
-                matrixResult[j].Add(result[i]);
+
+                if (result[i] < 10)
+                {
+                    matrixResult[j].Add("0" + result[i].ToString());
+                }
+                else matrixResult[j].Add(result[i].ToString());
+
                 Console.Write(matrixResult[j][k] + " |");
                 k++;
             }
-            Console.WriteLine();
+            Console.WriteLine("\n");
             return matrixResult;
+        }
+
+        public static string GetFinding(int count)
+        {
+            int result;
+            rand = new Random();
+            result = rand.Next(0, count);
+            if(result < 10)
+            {
+                return "0" + result.ToString();
+            }    
+            else
+            {
+                return result.ToString();
+            }
+            
         }
     }
 }

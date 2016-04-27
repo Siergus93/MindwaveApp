@@ -6,7 +6,7 @@
 
     <Window.Resources>
         <DataTemplate x:Key="DataTemplate_Level2">
-            <Button Content="{Binding}" Height="40" Width="40" Margin="4,4,4,4"/>
+            <Button Content="{Binding}" Height="40" Width="40" Margin="2"/>
         </DataTemplate>
 
         <DataTemplate x:Key="DataTemplate_Level1">
@@ -71,7 +71,6 @@
             
             <StackPanel Grid.Column="1"
                         HorizontalAlignment="Stretch"
-                        
                         VerticalAlignment="Stretch" Background="Black"
                         >
                 <Label x:Name="color1Label" FontSize="40" HorizontalAlignment="Center">Color1</Label>
@@ -86,11 +85,25 @@
              Grid.Column="2"
              Grid.ColumnSpan="3"
              Visibility="Visible"
-             Background="Black"
              HorizontalAlignment="Stretch"
              VerticalAlignment="Stretch"
             >
-            <ItemsControl x:Name="matrixQuestView" ItemTemplate="{DynamicResource DataTemplate_Level1}"/>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="5*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <Grid Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <TextBlock x:Name="matrixQuestTextBlock"
+                           Text="00"
+                           Visibility='Hidden'
+                           FontSize="64" FontWeight="Bold"
+                           ></TextBlock>
+            </Grid>
+            
+
+            <ItemsControl Grid.Column="1" x:Name="matrixQuestView" ItemTemplate="{DynamicResource DataTemplate_Level1}"/>
         </Grid>
 
 
