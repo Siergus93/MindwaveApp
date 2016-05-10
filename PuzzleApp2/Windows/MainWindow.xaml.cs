@@ -12,7 +12,7 @@ using Microsoft.Research.DynamicDataDisplay;
 using Microsoft.Research.DynamicDataDisplay.DataSources;
 using System.IO;
 
-namespace PuzzleApp2
+namespace PuzzleApp2.Windows
 {
     public partial class MainWindow : Window
     {
@@ -45,12 +45,25 @@ namespace PuzzleApp2
         public Color[] colorsConstants = { Colors.Green, Colors.Red, Colors.DeepSkyBlue, Colors.Yellow, Colors.DarkOrchid };
         
         public string[] puzzleChoice = { "ReversedWord", "StroopEffect", "MatrixQuest" };
+
+        public string nickname;
+        public bool isWindowClosing;
                   
         public MainWindow()
         {
-            
             InitializeComponent();
+            Initialize();
+        }
 
+        public MainWindow(string nickname)
+        {
+            InitializeComponent();
+            Initialize();
+            this.nickname = nickname;
+        }
+
+        private void Initialize()
+        {
             _thinkGearWrapper = new ThinkGearWrapper();
 
             //zmienic to!
@@ -69,9 +82,9 @@ namespace PuzzleApp2
                 connectButton.IsEnabled = false;
 
             foreach (string choice in puzzleChoice)
-	        {
+            {
                 puzzleChoiceComboBox.Items.Add(choice);
-	        }
+            }
 
             attentionValuesCollection = new DataCollection();
             var attentionDataSource = new EnumerableDataSource<Data>(attentionValuesCollection);
@@ -83,7 +96,8 @@ namespace PuzzleApp2
             attentionComingCounter = 0;
             attentionValueSum = 0;
             puzzlesSolved = 0;
-            currentWord = "";       
+            currentWord = "";
+            isWindowClosing = false;
 
         }
 
@@ -280,6 +294,31 @@ namespace PuzzleApp2
                 matrixQuestTextBlock.Visibility = System.Windows.Visibility.Visible;
             }
         }
+
+        private void backToStartButton_Click(object sender, RoutedEventArgs e)
+        {
+            AreYouSureToQuitWindow quit = new AreYouSureToQuitWindow(this, true);
+            App.Current.MainWindow = quit;
+            this.Hide();
+            quit.Show();
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if(!isWindowClosing)
+            {
+                e.Cancel = true;
+
+                isWindowClosing = true;
+
+                AreYouSureToQuitWindow quit = new AreYouSureToQuitWindow(this, false);
+                App.Current.MainWindow = quit;
+                this.Hide();
+                quit.Show(); 
+            }
+        }
+
+        
 
         
     }
