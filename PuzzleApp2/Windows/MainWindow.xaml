@@ -130,6 +130,7 @@
             <Button x:Name="connectButton" Height="24" Content="Connect" Click="connectButton_Click"></Button>
             <ComboBox x:Name="puzzleChoiceComboBox" SelectionChanged="puzzleChoiceComboBox_SelectionChanged" SelectedIndex="0"></ComboBox>
             <Button x:Name="backToStartButton" Content="Back to StartWindow" Height="24" Click="backToStartButton_Click"></Button>
+            <Button x:Name="saveScoreButton" Content="Save score!" Height="24" Click="saveScoreButton_Click"></Button>
         </StackPanel>
         <Button x:Name="StartButton" Content="Next puzzle!" Click="NextPuzzleButton_Click" FontSize="20" Background="#FFADE635"/>
         

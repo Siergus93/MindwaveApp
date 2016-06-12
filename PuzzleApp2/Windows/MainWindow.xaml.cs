@@ -59,6 +59,8 @@ namespace PuzzleApp2.Windows
         public bool isPuzzleChoiceComboBoxInitialySelected;
 
         public List<Score> scoresList;
+
+        public string lastPuzzleChoice = String.Empty;
                   
         public MainWindow()
         {
@@ -356,26 +358,25 @@ namespace PuzzleApp2.Windows
 
             if (isPuzzleChoiceComboBoxInitialySelected)
             {
-                Score score = new Score(nickname, puzzleChoice[puzzleChoiceComboBox.SelectedIndex] , GetAverageValueFromList(oneTrialScoresList));
-                Console.WriteLine("p: " + nickname + " t: " + puzzleChoice[puzzleChoiceComboBox.SelectedIndex] + " a: " + GetAverageValueFromList(oneTrialScoresList));
+                //saving to file procedure!
+
+                Score score = new Score(nickname, lastPuzzleChoice, GetAverageValueFromList(oneTrialScoresList));
+                Console.WriteLine("p: " + nickname + " t: " + lastPuzzleChoice + " a: " + GetAverageValueFromList(oneTrialScoresList));
                 oneTrialScoresList.Clear();
 
                 scoresList.Add(score);
-                scoresList = scoresList.OrderByDescending(s => s.scoreValue).Take(10).ToList();
+                scoresList = scoresList.OrderByDescending(s => s.scoreValue).Take(30).ToList();
                 string json = JsonConvert.SerializeObject(scoresList);
-
-                //...zapis do pliku!
 
                 using(StreamWriter writeText = new StreamWriter("ranking.json"))
                 {
                     writeText.Write(json);
                 }
-                int i = 0;
 
-
-                
             }
             else isPuzzleChoiceComboBoxInitialySelected = true;
+
+            lastPuzzleChoice = puzzleChoiceComboBox.SelectedItem.ToString();
 
 
         }
@@ -413,8 +414,23 @@ namespace PuzzleApp2.Windows
 
                 AreYouSureToQuitWindow quit = new AreYouSureToQuitWindow(this, false);
                 App.Current.MainWindow = quit;
-                this.Hide();
-                quit.Show(); 
+                quit.Show();
+            }
+        }
+
+        private void saveScoreButton_Click(object sender, RoutedEventArgs e)
+        {
+            Score score = new Score(nickname, lastPuzzleChoice, GetAverageValueFromList(oneTrialScoresList));
+            Console.WriteLine("p: " + nickname + " t: " + lastPuzzleChoice + " a: " + GetAverageValueFromList(oneTrialScoresList));
+            oneTrialScoresList.Clear();
+
+            scoresList.Add(score);
+            scoresList = scoresList.OrderByDescending(s => s.scoreValue).Take(10).ToList();
+            string json = JsonConvert.SerializeObject(scoresList);
+
+            using (StreamWriter writeText = new StreamWriter("ranking.json"))
+            {
+                writeText.Write(json);
             }
         }
 

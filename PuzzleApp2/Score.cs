@@ -8,15 +8,20 @@ namespace PuzzleApp2
 {
     public class Score
     {
-        public string playersNickname;
-        public string trialName;
-        public int scoreValue;
+        public string playersNickname { get; set; }
+        public string trialName { get; set; }
+        public int scoreValue { get; set; }
 
         public Score(string playersNickname, string trialName, int scoreValue)
         {
             this.playersNickname = playersNickname;
             this.trialName = trialName;
             this.scoreValue = scoreValue;
+        }
+
+        public Score()
+        {
+
         }
     }
 }

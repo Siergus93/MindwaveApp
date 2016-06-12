@@ -84,6 +84,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Animal.cs" />
     <Compile Include="MatrixGenerator.cs" />
     <Compile Include="RandomProvider.cs" />
     <Compile Include="Score.cs" />
@@ -92,6 +93,9 @@
     </Compile>
     <Compile Include="Windows\NicknameWindow.xaml.cs">
       <DependentUpon>NicknameWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\RankingWindow.xaml.cs">
+      <DependentUpon>RankingWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\StartWindow.xaml.cs">
       <DependentUpon>StartWindow.xaml</DependentUpon>
@@ -113,6 +117,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Windows\NicknameWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\RankingWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

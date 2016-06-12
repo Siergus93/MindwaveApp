@@ -36,5 +36,13 @@ namespace PuzzleApp2.Windows
         {
             this.Close();
         }
+
+        private void rankingButton_Click(object sender, RoutedEventArgs e)
+        {
+            Windows.RankingWindow rankingWindow = new Windows.RankingWindow();
+            App.Current.MainWindow = rankingWindow;
+            rankingWindow.Show();
+            this.Close();
+        }
     }
 }
