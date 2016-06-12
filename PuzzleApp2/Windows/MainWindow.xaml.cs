@@ -11,6 +11,9 @@ using ThinkGearNET;
 using Microsoft.Research.DynamicDataDisplay;
 using Microsoft.Research.DynamicDataDisplay.DataSources;
 using System.IO;
+using System.Timers;
+using System.Linq;
+using Newtonsoft.Json;
 
 namespace PuzzleApp2.Windows
 {
@@ -48,6 +51,14 @@ namespace PuzzleApp2.Windows
 
         public string nickname;
         public bool isWindowClosing;
+
+        System.Windows.Threading.DispatcherTimer timer;
+
+        public List<int> oneTrialScoresList;
+
+        public bool isPuzzleChoiceComboBoxInitialySelected;
+
+        public List<Score> scoresList;
                   
         public MainWindow()
         {
@@ -65,6 +76,9 @@ namespace PuzzleApp2.Windows
         private void Initialize()
         {
             _thinkGearWrapper = new ThinkGearWrapper();
+            oneTrialScoresList = new List<int>();
+            isPuzzleChoiceComboBoxInitialySelected = false;
+            scoresList = new List<Score>();
 
             //zmienic to!
 
@@ -99,6 +113,32 @@ namespace PuzzleApp2.Windows
             currentWord = "";
             isWindowClosing = false;
 
+            //demomode stuff!
+            timer = new System.Windows.Threading.DispatcherTimer();
+            timer.Tick += timer_Tick;
+            timer.Interval = new TimeSpan(0, 0, 1);
+            timer.Start();
+
+
+            
+            //read file with ranking
+            string json;
+            using (StreamReader readText = new StreamReader("ranking.json"))
+            {
+                json = readText.ReadLine();
+            }
+            scoresList = JsonConvert.DeserializeObject<List<Score>>(json);
+
+        }
+
+        void timer_Tick(object sender, EventArgs e)
+        {
+            attentionValue = randomNumber.Next(0, 100);
+            attentionTextBlock.Text = "Att Value: " + attentionValue;
+            Attention.Text = attentionValue.ToString();
+            attentionValuesCollection.Add(new Data(attentionValue, DateTime.Now));
+            attentionValueSum += (int)attentionValue;
+            attentionComingCounter += 1;
         }
 
         public string GetWord()
@@ -192,6 +232,7 @@ namespace PuzzleApp2.Windows
         {
             if(!deviceIsConnected)
             {
+                timer.Stop();
                 _thinkGearWrapper.ThinkGearChanged += _thinkGearWrapper_ThinkGearChanged;
                 if (!_thinkGearWrapper.Connect(portsComboBox.SelectedItem.ToString(), 57600, true))
                 {
@@ -204,6 +245,7 @@ namespace PuzzleApp2.Windows
             }
             else
             {
+                timer.Start();
                 _thinkGearWrapper.Disconnect();
                 connectButton.Content = "Connect";
                 deviceIsConnected = false;
@@ -220,6 +262,7 @@ namespace PuzzleApp2.Windows
                 if (puzzlesSolved > 0 && attentionComingCounter > 0)
                 {
                     Console.WriteLine("w: " + previousWord + " l: " + previousWord.Length + " av: " + attentionValueSum / attentionComingCounter);
+                    oneTrialScoresList.Add((int)(attentionValueSum / attentionComingCounter));
                 }
                 puzzlesSolved++;
                 attentionComingCounter = 0;
@@ -229,10 +272,6 @@ namespace PuzzleApp2.Windows
             //Stroop Effect Puzzle Section
             else if (puzzleChoiceComboBox.SelectedIndex == 1)
             {
-                //foreach (var item in GetColorsNames(GetRandomNumbers(5)))
-                //{
-                //    Console.WriteLine(item);
-                //}
                 List<string> data = GetColorsNames(GetRandomNumbers(5));
                 List<Color> colorData = GetColorsContants(GetRandomNumbers(5));
 
@@ -250,6 +289,17 @@ namespace PuzzleApp2.Windows
 
                 color5Label.Content = data[4];
                 color5Label.Foreground = new SolidColorBrush(colorData[4]);
+
+
+                if (puzzlesSolved > 0 && attentionComingCounter > 0)
+                {
+                    Console.WriteLine(" av: " + attentionValueSum / attentionComingCounter);
+                    oneTrialScoresList.Add((int)(attentionValueSum / attentionComingCounter));
+                }
+                puzzlesSolved++;
+                attentionComingCounter = 0;
+                attentionValueSum = 0;
+
             }
             else if (puzzleChoiceComboBox.SelectedIndex == 2)
             {
@@ -257,6 +307,16 @@ namespace PuzzleApp2.Windows
                 List<List<string>> result = MatrixGenerator.GetMatrix(matrixNumberOfElementsBadasss);
                 matrixQuestView.ItemsSource = result;
                 matrixQuestTextBlock.Text = MatrixGenerator.GetFinding(matrixNumberOfElementsBadasss);
+
+                if (puzzlesSolved > 0 && attentionComingCounter > 0)
+                {
+                    Console.WriteLine(" av: " + attentionValueSum / attentionComingCounter);
+                    oneTrialScoresList.Add((int)(attentionValueSum / attentionComingCounter));
+                }
+                puzzlesSolved++;
+                attentionComingCounter = 0;
+                attentionValueSum = 0;
+
             }
 
         }
@@ -293,6 +353,46 @@ namespace PuzzleApp2.Windows
                 matrixQuestView.Visibility = System.Windows.Visibility.Visible;
                 matrixQuestTextBlock.Visibility = System.Windows.Visibility.Visible;
             }
+
+            if (isPuzzleChoiceComboBoxInitialySelected)
+            {
+                Score score = new Score(nickname, puzzleChoice[puzzleChoiceComboBox.SelectedIndex] , GetAverageValueFromList(oneTrialScoresList));
+                Console.WriteLine("p: " + nickname + " t: " + puzzleChoice[puzzleChoiceComboBox.SelectedIndex] + " a: " + GetAverageValueFromList(oneTrialScoresList));
+                oneTrialScoresList.Clear();
+
+                scoresList.Add(score);
+                scoresList = scoresList.OrderByDescending(s => s.scoreValue).Take(10).ToList();
+                string json = JsonConvert.SerializeObject(scoresList);
+
+                //...zapis do pliku!
+
+                using(StreamWriter writeText = new StreamWriter("ranking.json"))
+                {
+                    writeText.Write(json);
+                }
+                int i = 0;
+
+
+                
+            }
+            else isPuzzleChoiceComboBoxInitialySelected = true;
+
+
+        }
+
+        public int GetAverageValueFromList(List<int> list)
+        {
+            if (list.Count <= 0)
+                return 0;
+            else
+            {
+                int result = 0;
+                for (int i = 0; i < list.Count; i++)
+                {
+                    result += list[i];
+                }
+                return (int)(result / list.Count);
+            }
         }
 
         private void backToStartButton_Click(object sender, RoutedEventArgs e)
@@ -317,6 +417,7 @@ namespace PuzzleApp2.Windows
                 quit.Show(); 
             }
         }
+
 
         
 
