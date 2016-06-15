@@ -84,7 +84,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Animal.cs" />
     <Compile Include="MatrixGenerator.cs" />
     <Compile Include="RandomProvider.cs" />
     <Compile Include="Score.cs" />
